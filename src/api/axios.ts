@@ -27,7 +27,7 @@ export const api = axios.create({
     "Content-Type": "application/json",
   },
 });
-// console.log("BASE URL:", import.meta.env.VITE_APP_API_TEST);
+console.log("BASE URL:", import.meta.env.VITE_APP_API_TEST);
 
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {

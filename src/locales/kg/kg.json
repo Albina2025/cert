@@ -59,33 +59,31 @@
         }
     },
     "privateSectorModal": {
-        "title": "Жеке секторду кошуу",
+        "title": "Жеке сектор кошуу",
         "fields": {
-        "name": "Аталышы",
-        "parent": "Жогору турган",
-        "address": "Дареги",
-        "status": "Статусу"
-        },
-        "statusOptions": {
-        "active": "Активдүү",
-        "inactive": "Активдүү эмес"
+            "titleRu": "Орусча аталышы",
+            "titleKg": "Кыргызча аталышы",
+            "parent": "Жогору турган",
+            "address": "Дареги",
+            "logo": "Логотиби"
         },
         "buttons": {
-        "cancel": "Жокко чыгаруу",
-        "confirm": "Ырастоо"
+            "cancel": "Жокко чыгаруу",
+            "confirm": "Ырастоо"
         }
     },
     "privateSectorFilter": {
-        "title": "Жеке сектор фильтри",
+        "title": "Сектор фильтри",
         "fields": {
-        "name": "Аталышы",
-        "address": "Дареги",
-        "useAPI": "API колдонулат",
-        "audited": "Текшерилген"
+            "title": "Аталышы",
+            "address": "Дареги",
+            "enabled": "Активдүү",
+            "exclude": "Чыгарып салуу (ID)",
+            "auditedMinistries": "Текшерилген"
         },
         "buttons": {
-        "reset": "Тазалоо",
-        "apply": "Колдонуу"
+            "reset": "Тазалоо",
+            "apply": "Колдонуу"
         }
     },
     "softwareModal": {

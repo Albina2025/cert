@@ -3,7 +3,7 @@ export interface AiItem {
     titleKg: string;
     titleRu: string;
 
-     ministryDto: {
+  ministryDto: {
     id: number;
     titleKg: string;
     titleRu: string;

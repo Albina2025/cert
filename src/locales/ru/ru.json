@@ -62,33 +62,31 @@
         }
     },
     "privateSectorModal": {
-        "title": "Добавить частный сектор",
+        "title": "Добавить частный  сектор",
         "fields": {
-        "name": "Наименование",
-        "parent": "Вышестоящий",
-        "address": "Адрес",
-        "status": "Статус"
-        },
-        "statusOptions": {
-        "active": "Активный",
-        "inactive": "Неактивный"
+            "titleRu": "Наименование на русском",
+            "titleKg": "Наименование на кыргызском",
+            "parent": "Вышестоящий",
+            "address": "Адрес",
+            "logo": "Логотип"
         },
         "buttons": {
-        "cancel": "Отменить",
-        "confirm": "Подтвердить"
+            "cancel": "Отменить",
+            "confirm": "Подтвердить"
         }
     },
     "privateSectorFilter": {
-        "title": "Фильтр Private Sector",
+        "title": "Фильтр сектора",
         "fields": {
-        "name": "Наименование",
-        "address": "Адрес",
-        "useAPI": "Используется API",
-        "audited": "Проверено"
+            "title": "Наименование",
+            "address": "Адрес",
+            "enabled": "Активный",
+            "exclude": "Исключить (ID)",
+            "auditedMinistries": "Проверено"
         },
         "buttons": {
-        "reset": "Сбросить",
-        "apply": "Применить"
+            "reset": "Сбросить",
+            "apply": "Применить"
         }
     },
     "softwareModal": {
@@ -144,6 +142,7 @@
         "title": "Добавление ИИ",
 
         "fields": {
+            "actions": "Дейсдвия",
             "ministryId": "Субъект",
             "computePlatformTypeId": "Тип вычислительной платформы",
             "hardwareName": "Наименование оборудования",

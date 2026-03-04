@@ -1,5 +1,5 @@
 export interface AiFormValues {
-     ministryId: string;
+  ministryId: string;
   computePlatformTypeId: string;
 
   hardwareName: string;
