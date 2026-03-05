@@ -1,173 +1,158 @@
+
+
 import {
-    Stack,
-    Group,
-    Box,
-    Grid,
-} from '@mantine/core';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { addItem } from '../../../store/dataSlice';
-import { v4 as uuidv4 } from 'uuid';
-import { FloatingInput } from '../../../UI/input/FloatingInput';
-import { FloatingSelect } from '../../../UI/input/FloatingSelect';
-import { BaseModal } from '../../../UI/modal/BaseModal';
-import { BaseButton } from '../../../UI/button/BaseButton';
+  Stack,
+  Group,
+  Box,
+  Grid,
+  Title,
+  Divider,
+} from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { notifications } from "@mantine/notifications";
+import { BaseModal } from "../../../UI/modal/BaseModal";
+import { BaseButton } from "../../../UI/button/BaseButton";
+import { FloatingInput } from "../../../UI/input/FloatingInput";
+import { FloatingSelect } from "../../../UI/input/FloatingSelect";
 import { useTranslation } from "react-i18next";
 
-interface SoftwareAddModalProps {
+import { createSoftware } from "../../../services/software.service";
+import type { SoftwareFormValues } from "../../../types/software/software.form.types";
+import type { SoftwareCreateRequest } from "../../../types/software/software.request.types";
+
+interface Props {
   opened: boolean;
   onClose: () => void;
 }
 
-export const SoftwareAddModal: React.FC<SoftwareAddModalProps> = ({
+export const SoftwareAddModal: React.FC<Props> = ({
   opened,
   onClose,
 }) => {
-  const dispatch = useDispatch();
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
-  const [form, setForm] = useState({
-    subject: '',
-    name: '',
-    purpose: '',
-    manufacturer: '',
-    supplier: '',
-    purchaseDate: '',
-    purchaseAmount: '',
-    currency: '',
-    version: '',
-    lastUpdateDate: '',
-    licenseType: '',
-    licenseEndDate: '',
-    licenseCount: '',
+  // ================= FORM =================
+  const form = useForm<SoftwareFormValues>({
+    initialValues: {
+      ministryId: "",
+      softwareName: "",
+      softwarePurpose: "",
+      manufacturer: "",
+      supplier: "",
+      purchaseDate: "",
+      purchaseAmount: "",
+      purchaseCurrencyId: "",
+      softwareVersion: "",
+      lastUpdateDate: "",
+      licenseType: "",
+      licenseExpiryDate: "",
+      licenseCount: "",
+    },
   });
 
-  const handleChange = (field: string, value: string) => {
-    setForm((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+  // ================= MAP TO REQUEST =================
+  const mapToRequest = (
+    values: SoftwareFormValues
+  ): SoftwareCreateRequest => {
+    return {
+      ministryId: Number(values.ministryId),
+      softwareName: values.softwareName,
+      softwarePurpose: values.softwarePurpose,
+      manufacturer: values.manufacturer,
+      supplier: values.supplier,
+      purchaseDate: values.purchaseDate,
+      purchaseAmount: Number(values.purchaseAmount),
+      purchaseCurrencyId: Number(values.purchaseCurrencyId),
+      softwareVersion: values.softwareVersion,
+      lastUpdateDate: values.lastUpdateDate,
+      licenseType: values.licenseType,
+      licenseExpiryDate: values.licenseExpiryDate,
+      licenseCount: Number(values.licenseCount),
+    };
   };
 
-  const handleSubmit = () => {
-    dispatch(
-      addItem({
-        id: uuidv4(),
-        type: 'software',
-        data: {
-          action: 'Create',
-          subject: form.subject,
-          name: form.name,
-          purpose: form.purpose,
-          manufacturer: form.manufacturer,
-          supplier: form.supplier,
-          purchaseDate: form.purchaseDate,
-          purchaseAmount: Number(form.purchaseAmount),
-          currency: form.currency,
-          version: form.version,
-          lastUpdateDate: form.lastUpdateDate,
-          licenseType: form.licenseType,
-          licenseEndDate: form.licenseEndDate,
-          licenseCount: Number(form.licenseCount),
-        },
-      })
-    );
+  // ================= MUTATION =================
+  const mutation = useMutation({
+    mutationFn: createSoftware,
+    onSuccess: () => {
+      notifications.show({
+        title: t("notifications.success"),
+        message: t("notifications.created"),
+        color: "green",
+      });
 
+      queryClient.invalidateQueries({ queryKey: ["software"] });
 
-    setForm({
-      subject: '',
-      name: '',
-      purpose: '',
-      manufacturer: '',
-      supplier: '',
-      purchaseDate: '',
-      purchaseAmount: '',
-      currency: '',
-      version: '',
-      lastUpdateDate: '',
-      licenseType: '',
-      licenseEndDate: '',
-      licenseCount: '',
-    });
+      form.reset();
+      onClose();
+    },
+  });
 
-    onClose();
+  const handleSubmit = (values: SoftwareFormValues) => {
+    mutation.mutate(mapToRequest(values));
   };
 
   return (
     <BaseModal
       opened={opened}
       onClose={onClose}
-      radius={15}
-      centered
       size={1200}
+      centered
       withCloseButton={false}
     >
       <Stack>
         <Box
-          p="md"
+           p="md"
           style={{
             border: '1px solid #303d43',
             borderRadius: 8,
-          }}
-        >
-            
-          <Group justify="center">
-            <h2>{t("softwareModal.title")}</h2>
-          </Group>
-            
+           }}
+        > 
+        <Title ta="center">
+          {t("softwareModal.title")}
+        </Title>
 
+        <Divider />
+
+        <form onSubmit={form.onSubmit(handleSubmit)}>
           <Grid>
+
+            {/* Ministry */}
             <Grid.Col span={6}>
-              <FloatingSelect
+              <FloatingInput
+                type="number"
                 labelText={t("softwareModal.fields.subject")}
-                value={form.subject}
-                onChange={(value) =>
-                   handleChange('subject', value || '')
-                }
-                data={[
-                  { value: 'state', label: t("softwareModal.subjectOptions.state") },
-                  { value: 'private', label: t("softwareModal.subjectOptions.private") },
-                ]}
+                {...form.getInputProps("ministryId")}
               />
             </Grid.Col>
 
             <Grid.Col span={6}>
               <FloatingInput
                 labelText={t("softwareModal.fields.name")}
-                value={form.name}
-                onChange={(e) =>
-                  handleChange('name', e.currentTarget.value)
-                }
+                {...form.getInputProps("softwareName")}
               />
             </Grid.Col>
 
             <Grid.Col span={6}>
               <FloatingInput
                 labelText={t("softwareModal.fields.purpose")}
-                value={form.purpose}
-                onChange={(e) =>
-                  handleChange('purpose', e.currentTarget.value)
-                }
+                {...form.getInputProps("softwarePurpose")}
               />
             </Grid.Col>
 
             <Grid.Col span={6}>
               <FloatingInput
                 labelText={t("softwareModal.fields.manufacturer")}
-                value={form.manufacturer}
-                onChange={(e) =>
-                  handleChange('manufacturer', e.currentTarget.value)
-                }
+                {...form.getInputProps("manufacturer")}
               />
             </Grid.Col>
 
             <Grid.Col span={6}>
               <FloatingInput
                 labelText={t("softwareModal.fields.supplier")}
-                value={form.supplier}
-                onChange={(e) =>
-                  handleChange('supplier', e.currentTarget.value)
-                }
+                {...form.getInputProps("supplier")}
               />
             </Grid.Col>
 
@@ -175,10 +160,7 @@ export const SoftwareAddModal: React.FC<SoftwareAddModalProps> = ({
               <FloatingInput
                 type="date"
                 labelText={t("softwareModal.fields.purchaseDate")}
-                value={form.purchaseDate}
-                onChange={(e) =>
-                  handleChange('purchaseDate', e.currentTarget.value)
-                }
+                {...form.getInputProps("purchaseDate")}
               />
             </Grid.Col>
 
@@ -186,25 +168,22 @@ export const SoftwareAddModal: React.FC<SoftwareAddModalProps> = ({
               <FloatingInput
                 type="number"
                 labelText={t("softwareModal.fields.purchaseAmount")}
-                value={form.purchaseAmount}
-                onChange={(e) =>
-                  handleChange('purchaseAmount', e.currentTarget.value)
-                }
+                {...form.getInputProps("purchaseAmount")}
               />
             </Grid.Col>
 
             <Grid.Col span={6}>
-              <FloatingSelect
-                labelText={t("softwareModal.fields.currency")}
-                value={form.currency}
-                onChange={(value) =>
-                  handleChange('currency', value || '')
-                }
-                data={[
-                  { value: 'сом', label: t("softwareModal.currencyOptions.som") },
-                  { value: 'евро', label:  t("softwareModal.currencyOptions.euro") },
-                  { value: 'доллар', label:  t("softwareModal.currencyOptions.dollar") },
-                ]}
+              <FloatingInput
+                type="number"
+                labelText={t("softwareModal.fields.purchaseCurrency")}
+                {...form.getInputProps("purchaseCurrencyId")}
+              />
+            </Grid.Col>
+
+            <Grid.Col span={6}>
+              <FloatingInput
+                labelText={t("softwareModal.fields.softwareVersion")}
+                {...form.getInputProps("softwareVersion")}
               />
             </Grid.Col>
 
@@ -212,82 +191,59 @@ export const SoftwareAddModal: React.FC<SoftwareAddModalProps> = ({
               <FloatingInput
                 type="date"
                 labelText={t("softwareModal.fields.lastUpdateDate")}
-                value={form.lastUpdateDate}
-                onChange={(e) =>
-                  handleChange('lastUpdateDate', e.currentTarget.value)
-                }
+                {...form.getInputProps("lastUpdateDate")}
               />
             </Grid.Col>
 
+            <Grid.Col span={6}>
+              <FloatingSelect
+                labelText={t("softwareModal.fields.licenseType")}
+                data={[
+                  { value: "Perpetual", label: "Perpetual" },
+                  { value: "Subscription", label: "Subscription" },
+                ]}
+                {...form.getInputProps("licenseType")}
+              />
+            </Grid.Col>
 
             <Grid.Col span={6}>
               <FloatingInput
                 type="date"
-                labelText={t("softwareModal.fields.licenseEndDate")}
-                value={form.licenseEndDate}
-                onChange={(e) =>
-                  handleChange('licenseEndDate', e.currentTarget.value)
-                }
+                labelText={t("softwareModal.fields.licenseExpiryDate")}
+                {...form.getInputProps("licenseExpiryDate")}
               />
             </Grid.Col>
-
-            
-            <Grid.Col span={6}>
-              <FloatingInput
-                labelText={t("softwareModal.fields.version")}
-                value={form.version}
-                onChange={(e) =>
-                  handleChange('version', e.currentTarget.value)
-                }
-              />
-            </Grid.Col>
-
-            
-           <Grid.Col span={6}>
-              <FloatingSelect
-                labelText={t("softwareModal.fields.licenseType")}
-                value={form.licenseType}
-                onChange={(value) =>
-                  handleChange('licenseType', value || '')
-                }
-                data={[
-                  { value: 'commercial', label: t("softwareModal.licenseOptions.commercial") },
-                  { value: 'open', label: t("softwareModal.licenseOptions.open") },
-                  { value: 'trial', label: t("softwareModal.licenseOptions.trial") },
-                ]}
-              />
-            </Grid.Col>
-
 
             <Grid.Col span={12}>
               <FloatingInput
                 type="number"
                 labelText={t("softwareModal.fields.licenseCount")}
-                value={form.licenseCount}
-                onChange={(e) =>
-                  handleChange('licenseCount', e.currentTarget.value)
-                }
+                {...form.getInputProps("licenseCount")}
               />
             </Grid.Col>
-          </Grid>
-        </Box>
 
-        <Group justify="center">
-          <BaseButton 
-                variantType="secondary" 
-                onClick={onClose}>
-            {t("softwareModal.buttons.cancel")}
-          </BaseButton>
-          <BaseButton 
-                variantType='primary' 
-                onClick={handleSubmit}
-          >
-             {t("softwareModal.buttons.confirm")}
-          </BaseButton>
-        </Group>
+          </Grid>
+       
+          <Group justify="center" mt="md">
+            <BaseButton
+              type="button"
+              variantType="secondary"
+              onClick={onClose}
+            >
+              {t("softwareModal.buttons.cancel")}
+            </BaseButton>
+
+            <BaseButton
+              type="submit"
+              variantType="primary"
+              loading={mutation.isPending}
+            >
+              {t("softwareModal.buttons.confirm")}
+            </BaseButton>
+          </Group>
+        </form>
+         </Box>
       </Stack>
     </BaseModal>
   );
 };
-
-

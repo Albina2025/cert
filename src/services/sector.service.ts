@@ -4,6 +4,7 @@ import type {
   SectorSearchRequest,
   SectorSearchResponse,
 } from "../types/sector.types";
+import type { SectorItem } from "../types/sector.types";
 
 
 
@@ -18,14 +19,16 @@ export const searchSector = (data: SectorSearchRequest) =>
     data
   );
 
+// export const deleteSector = (id: number) =>
+//   api.delete(`/api/v1/sector/${id}`);
 
+export const getSectorById = async (id: number) => {
+   const response = await api.get<SectorItem>(
+    `/api/v1/sector/${id}`
+  );
+  return response.data;
+};
 
-export const deleteSector = (id: number) =>
-  api.delete(`/api/v1/sector/${id}`);
-
-
-
-export const updateSector = (
-  id: number,
-  data: CreateSectorRequest
-) => api.put(`/api/v1/sector/${id}`, data);
+export const updateSector = (id: number, data: CreateSectorRequest) => {
+  return api.put(`/api/v1/sector/${id}`, data);
+};

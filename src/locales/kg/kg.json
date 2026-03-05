@@ -40,22 +40,6 @@
             "aiModelPurpose": "ЖИ моделинин максаты",
             "aiModelDeveloper": "ЖИ моделин иштеп чыгуучу / жеткирүүчү",
             "apiProvider": "API жеткирүүчү (эгер колдонулса)"
-        },
-        "software": {
-            "action": "Аракеттер",
-            "subject": "Субъект",
-            "name": "Программалык камсыздоонун аталышы",
-            "purpose": "Программалык камсыздоонун максаты",
-            "manufacturer": "Программалык камсыздоону өндүрүүчү",
-            "supplier": "Программалык камсыздоону жеткирүүчү",
-            "purchaseDate": "Сатып алынган дата",
-            "purchaseAmount": "Сатып алуу суммасы",
-            "currency": "Валюта",
-            "lastUpdateDate": "Акыркы жаңыртуу датасы",
-            "licenseEndDate": "Лицензиянын мөөнөтү аяктаган дата",
-            "version": "Версия",
-            "licenseType": "Лицензиянын түрү",
-            "licenseCount": "Лицензиялардын саны"
         }
     },
     "privateSectorModal": {
@@ -88,6 +72,8 @@
     },
     "softwareModal": {
         "title": "Программалык камсыздоону кошуу",
+        "editTitle": "Программалык камсыздоону өзгөртүү",
+
         "fields": {
         "subject": "Субъект",
         "name": "Программалык камсыздоонун аталышы",
@@ -97,42 +83,52 @@
         "purchaseDate": "Сатып алынган дата",
         "purchaseAmount": "Сатып алуу суммасы",
         "currency": "Валюта",
+        "softwareVersion": "Версия",
         "lastUpdateDate": "Акыркы жаңыртуу датасы",
-        "licenseEndDate": "Лицензиянын мөөнөтү аяктаган дата",
-        "version": "Версия",
+        "licenseExpiryDate": "Лицензиянын мөөнөтү аяктаган дата",
         "licenseType": "Лицензиянын түрү",
         "licenseCount": "Лицензиялардын саны"
         },
+
         "licenseOptions": {
         "commercial": "Коммерциялык",
         "open": "Ачык булак",
         "trial": "Сыноо"
         },
+
         "subjectOptions": {
         "state": "Мамлекеттик",
         "private": "Жеке"
         },
+
         "currencyOptions": {
         "som": "Сом",
         "euro": "Евро",
         "dollar": "Доллар"
         },
+
         "buttons": {
         "cancel": "Жокко чыгаруу",
-        "confirm": "Ырастоо"
+        "confirm": "Ырастоо",
+        "save": "Сактоо"
+        },
+        "software": {
+         "action": "Аракеттер"
         }
     },
 
-    "softwareFilter": {
-        "title": "Программалык камсыздоону фильтрлөө",
-        "fields": {
-        "subject": "Субъект"
-        },
-        "buttons": {
-        "reset": "Тазалоо",
-        "apply": " Колдонуу"
-        }
+  "softwareFilter": {
+    "title": "Программалык камсыздоону фильтрлөө",
+
+    "fields": {
+      "subject": "Субъект"
     },
+
+    "buttons": {
+      "reset": "Тазалоо",
+      "apply": "Колдонуу"
+    }
+  },
      "aiModal": {
         "hardware": "Аппараттык платформа (темир жабдык)",
         "model": "Жасалма интеллект модели",

@@ -18,8 +18,7 @@ import { useTranslation } from "react-i18next";
 
 import type { AiFormValues } from "../../../types/ai/ai.form.types";
 import type { CreateAiRequest } from "../../../types/ai/ai.request.types";
-
-import { api } from "../../../api/axios";
+import { createAi } from "../../../services/ai.service";
 
 interface AiAddModalProps {
   opened: boolean;
@@ -76,10 +75,8 @@ export const AiAddModal: React.FC<AiAddModalProps> = ({
   };
 
   const mutation = useMutation({
-    mutationFn: async (data: CreateAiRequest) => {
-      const response = await api.post("/api/v1/ai", data);
-      return response.data;
-    },
+    mutationFn: createAi,
+
     onSuccess: () => {
       notifications.show({
         title: t("notifications.success"),

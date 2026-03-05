@@ -102,12 +102,15 @@ import type {
 } from "../../types/sector/sector.response.types";
 
 import type { Column } from "../../layout/tableData/TableData";
+import { PrivateSectorEditModal } from "../../features/subject/privateSector/PrivateSectorEditModal";
 
 export const PrivateSectorPage: React.FC = () => {
   const { t, i18n } = useTranslation();
 
   const [openedAdd, setOpenedAdd] = useState(false);
   const [openedFilter, setOpenedFilter] = useState(false);
+  const [editId, setEditId] = useState<number | null>(null);
+  const [openedEdit, setOpenedEdit] = useState(false);
 
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -217,11 +220,21 @@ export const PrivateSectorPage: React.FC = () => {
         }}
         onAdd={() => setOpenedAdd(true)}
         onFilter={() => setOpenedFilter(true)}
+        onEdit={(row) => {
+          setEditId(row.id);
+          setOpenedEdit(true);
+        }}
       />
 
       <PrivateSectorAddModal
         opened={openedAdd}
         onClose={() => setOpenedAdd(false)}
+      />
+
+      <PrivateSectorEditModal
+        opened={openedEdit}
+        onClose={() => setOpenedEdit(false)}
+        sectorId={editId}
       />
 
       <PrivateSectorFilterModal

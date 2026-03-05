@@ -43,22 +43,6 @@
             "aiModelPurpose": "Назначение модели ИИ",
             "aiModelDeveloper": "Разработчик / поставщик модели ИИ",
             "apiProvider": "Поставщик API (если используется)"
-        },
-        "software": {
-            "action": "Действия",
-            "subject": "Субъект",
-            "name": "Название ПО",
-            "purpose": "Назначение ПО",
-            "manufacturer": "Производитель ПО",
-            "supplier": "Поставщик программного обеспечения",
-            "purchaseDate": "Дата приобретения",
-            "purchaseAmount": "Сумма приобретения",
-            "currency": "Валюта суммы",
-            "lastUpdateDate": "Дата последнего обновления ПО",
-            "licenseEndDate": "Дата окончания срока действия лицензии",
-            "version": "Версия",
-            "licenseType": "Тип лицензии ПО",
-            "licenseCount": "Количество лицензий ПО"
         }
     },
     "privateSectorModal": {
@@ -91,51 +75,63 @@
     },
     "softwareModal": {
         "title": "Добавление ПО",
+        "editTitle": "Редактирование ПО",
+
         "fields": {
-            "subject": "Субъект",
-            "name": "Название ПО",
-            "purpose": "Назначение ПО",
-            "manufacturer": "Производитель ПО",
-            "supplier": "Поставщик программного обеспечения",
-            "purchaseDate": "Дата приобретения",
-            "purchaseAmount": "Сумма приобретения",
-            "currency": "Валюта суммы",
-            "lastUpdateDate": "Дата последнего обновления ПО",
-            "licenseEndDate": "Дата окончания срока действия лицензии",
-            "version": "Версия ПО",
-            "licenseType": "Тип лицензии",
-            "licenseCount": "Количество лицензий ПО"
+        "subject": "Субъект",
+        "name": "Название ПО",
+        "purpose": "Назначение ПО",
+        "manufacturer": "Производитель",
+        "supplier": "Поставщик",
+        "purchaseDate": "Дата приобретения",
+        "purchaseAmount": "Сумма приобретения",
+        "currency": "Валюта",
+        "softwareVersion": "Версия",
+        "lastUpdateDate": "Дата последнего обновления",
+        "licenseExpiryDate": "Дата окончания лицензии",
+        "licenseType": "Тип лицензии",
+        "licenseCount": "Количество лицензий"
         },
+
         "licenseOptions": {
-            "commercial": "Коммерческая",
-            "open": "Open Source",
-            "trial": "Триал"
+        "commercial": "Коммерческая",
+        "open": "Open Source",
+        "trial": "Триал"
         },
+
         "subjectOptions": {
-            "state": "Государственный",
-            "private": "Частный"
+        "state": "Государственный",
+        "private": "Частный"
         },
+
         "currencyOptions": {
-            "som": "Сом",
-            "euro": "Евро",
-            "dollar": "Доллар"
+        "som": "Сом",
+        "euro": "Евро",
+        "dollar": "Доллар"
         },
+
         "buttons": {
-            "cancel": "Отменить",
-            "confirm": "Подтвердить"
+        "cancel": "Отменить",
+        "confirm": "Подтвердить",
+        "save": "Сохранить"
+        },
+        "software": {
+            "action": "Действия"
         }
     },
 
-    "softwareFilter": {
-        "title": "Фильтр программного обеспечения",
-        "fields": {
-            "subject": "Субъект"
-        },
-        "buttons": {
-            "reset": "Сбросить",
-            "apply": "Применить фильтры"
-        }
+  "softwareFilter": {
+    "title": "Фильтр программного обеспечения",
+
+    "fields": {
+      "subject": "Субъект"
     },
+
+    "buttons": {
+      "reset": "Сбросить",
+      "apply": "Применить"
+    }
+  },
     "aiModal": {
         "hardware": "Аппаратная платформа (железо)",
         "model": "Модель искусственного интеллекта",

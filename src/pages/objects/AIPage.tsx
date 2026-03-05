@@ -11,14 +11,18 @@ import { api } from "../../api/axios";
 import type {
   AiSearchRequest,
 } from "../../types/ai/ai.request.types";
-import type { AiItem,  AiSearchResponse} from "../../types/ai/ai.response.types";
+import type {  AiSearchResponse} from "../../types/ai/ai.response.types";
+import type { AiItem} from "../../types/ai/ai.item.types";
 import type { Column } from "../../layout/tableData/TableData";
+import { AiEditModal } from "../../features/object/ai/AiEditModal";
 
 export const AIPage: React.FC = () => {
   const { t } = useTranslation();
 
   const [openedAdd, setOpenedAdd] = useState(false);
   const [openedFilter, setOpenedFilter] = useState(false);
+  const [editId, setEditId] = useState<number | null>(null);
+  const [openedEdit, setOpenedEdit] = useState(false);
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState(10);
 
@@ -32,10 +36,15 @@ export const AIPage: React.FC = () => {
   // ==============================
   // 🔥 BACKEND SEARCH
   // ==============================
-  const { data, isLoading } = useQuery<
-    AiSearchResponse<AiItem>
-  >({
-    queryKey: ["ai", page, pageSize,  filter],
+  const { data, isLoading } = useQuery<AiSearchResponse<AiItem>>({
+    queryKey: [
+      "ai", 
+      page, 
+      pageSize,  
+      // filter
+      filter?.ministryId,
+      filter?.computePlatformTypeId,
+    ],
     queryFn: async () => {
       const request: AiSearchRequest = {
         pageRequest: {
@@ -46,14 +55,11 @@ export const AIPage: React.FC = () => {
           sortBy: "ID",
           sortDirection: "ASC",
         },
-        filter: filter,
+        // filter: filter,
+        filter,
       };
 
-      const response = await api.post(
-        "/api/v1/ai/search",
-        request
-      );
-
+      const response = await api.post("/api/v1/ai/search",request);
       return response.data;
     },
   });
@@ -125,6 +131,10 @@ export const AIPage: React.FC = () => {
         }}
         onAdd={() => setOpenedAdd(true)}
         onFilter={() => setOpenedFilter(true)}
+        onEdit={(row) => {
+          setEditId(row.id);
+          setOpenedEdit(true);
+        }}
       />
 
       <AiAddModal
@@ -134,12 +144,22 @@ export const AIPage: React.FC = () => {
         }}
       />
 
+      <AiEditModal
+        opened={openedEdit}
+        aiId={editId}
+        onClose={() => {
+          setOpenedEdit(false)
+          setEditId(null);
+        }}
+        
+      />
+
       <AiFilterModal
         opened={openedFilter}
         onClose={() => setOpenedFilter(false)}
         onApply={(values) => {
           setFilter(values);
-          setPage(1); // filter кылганда биринчи бетке өтүү
+          setPage(1); 
         }}
       />
     </>

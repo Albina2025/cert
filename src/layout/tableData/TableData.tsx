@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next";
 
 
 export interface Column<T> {
-  key: keyof T;
+  key: keyof T | "action";
   label: string;
   render?: (row: T) => React.ReactNode;
 }
@@ -32,21 +32,23 @@ interface TableDataProps<T> {
   onPageSizeChange: (size: number) => void;
   onAdd?: () => void;
   onFilter?: () => void;
+  onEdit?: (row: T) => void;
 }
 
  
 
-export function TableData<T>({
+export function TableData<T extends { id: number }>({
   columns,
   data,
   totalPages,
   totalElements,
   page,
+  pageSize,
   onPageChange,
-    pageSize,
   onPageSizeChange,
   onAdd,
   onFilter,
+  onEdit,
 }: TableDataProps<T>) {
   const { colorScheme } = useMantineColorScheme();
   const isDark = colorScheme === "dark";
@@ -136,7 +138,7 @@ export function TableData<T>({
             <tr>
               {columns.map((col) => (
                 <th
-                  key={String(col.key)}
+                  key={`header-${String(col.key)}`}
                   style={{
                     whiteSpace: 'nowrap',
                     border: '1px solid #dee2e6',  
@@ -147,30 +149,41 @@ export function TableData<T>({
                   {col.label}
                 </th>
               ))}
+               {onEdit && (
+                  <th key="header-action">
+                    {t("tableData.actions")}
+                  </th>
+                )}
             </tr>
           </thead> 
 
           <tbody>
-            {data.map((row, i) => (
-              <tr key={i}>
-                {columns.map((col) => (
-                  <td
-                    key={String(col.key)}
-                    style={{
-                      whiteSpace: 'nowrap',
-                      border: '1px solid #dee2e6',  
-                      padding: '8px',
-                      color: isDark ? "#ffffff" : "#000000", 
-                    }}
-                  >
-                     {col.render
-                      ? col.render(row)
-                      : String(row[col.key] ?? "")}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
+  {data.map((row) => (
+    <tr key={row.id}>
+      {columns.map((col) => (
+        <td key={`${row.id}-${String(col.key)}`}>
+          {col.key === "action"
+            ? col.render?.(row)
+            : col.render
+            ? col.render(row)
+            : String(row[col.key])}
+        </td>
+      ))}
+
+      {onEdit && (
+        <td key={`action-${row.id}`}>
+          <Button
+            size="xs"
+            variant="light"
+            onClick={() => onEdit(row)}
+          >
+            {t("buttons.edit")}
+          </Button>
+        </td>
+      )}
+    </tr>
+  ))}
+</tbody>
 
         
         </Table>
