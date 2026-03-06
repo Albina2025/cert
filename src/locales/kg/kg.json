@@ -20,30 +20,15 @@
         "filters":"Фильтрлер",
         "add": "Кошуу",
         "totalData": "Бардык маалыматтар",
-        "noData": "Маалымат жок"
+        "noData": "Маалымат жок",
+        "actions": "Аракеттер"
     },
-    "object": {
-        "ai": {
-            "action": "Аракеттер",
-            "apiUsage": "API колдонулушу",
-            "subject": "Субъект",
-            "platformType": "Эсептөө платформасынын түрү",
-            "equipmentName": "Жабдуунун аталышы",
-            "equipmentPurpose": "Жабдуунун максаты",
-            "ownerDepartment": "Жооптуу бөлүм (ээси)",
-            "equipmentSupplier": "Жабдуу жеткирүүчү",
-            "purchaseDate": "Сатып алынган дата",
-            "purchaseAmount": "Сатып алуу суммасы",
-            "currency": "Валюта",
-            "shortCharacteristics": "Кыскача мүнөздөмөлөр",
-            "aiModelName": "ЖИ моделинин аталышы",
-            "aiModelPurpose": "ЖИ моделинин максаты",
-            "aiModelDeveloper": "ЖИ моделин иштеп чыгуучу / жеткирүүчү",
-            "apiProvider": "API жеткирүүчү (эгер колдонулса)"
-        }
-    },
+    "buttons": {
+        "edit": "Өзгөртүү"
+    }, 
     "privateSectorModal": {
         "title": "Жеке сектор кошуу",
+        "editTitle": "Жеке секторду оңдоо",
         "fields": {
             "titleRu": "Орусча аталышы",
             "titleKg": "Кыргызча аталышы",
@@ -82,7 +67,7 @@
         "supplier": "Жеткирүүчү",
         "purchaseDate": "Сатып алынган дата",
         "purchaseAmount": "Сатып алуу суммасы",
-        "currency": "Валюта",
+        "purchaseCurrency": "Сатып алуу валютасы",
         "softwareVersion": "Версия",
         "lastUpdateDate": "Акыркы жаңыртуу датасы",
         "licenseExpiryDate": "Лицензиянын мөөнөтү аяктаган дата",
@@ -109,11 +94,7 @@
 
         "buttons": {
         "cancel": "Жокко чыгаруу",
-        "confirm": "Ырастоо",
-        "save": "Сактоо"
-        },
-        "software": {
-         "action": "Аракеттер"
+        "confirm": "Ырастоо"
         }
     },
 
@@ -129,23 +110,24 @@
       "apply": "Колдонуу"
     }
   },
-     "aiModal": {
+    "aiModal": {
         "hardware": "Аппараттык платформа (темир жабдык)",
         "model": "Жасалма интеллект модели",
         "title": "ЖИ кошуу",
+        "editTitle": "ЖИ түзөтүү",
 
        
 
          "fields": {
-            "ministryId": "Субъект",
-            "computePlatformTypeId": "Эсептөө платформасынын түрү",
+            "ministryId": "Министрлик ",
+            "computePlatformTypeId": "Эсептөө платформасынын түрү ",
             "hardwareName": "Жабдуунун аталышы",
             "hardwarePurpose": "Жабдуунун максаты",
             "responsibleUnit": "Жооптуу бөлүм",
             "hardwareSupplier": "Жабдуу жеткирүүчү",
             "purchaseDate": "Сатып алынган дата",
             "purchaseAmount": "Сатып алуу суммасы",
-            "purchaseCurrencyId": "Валюта",
+            "purchaseCurrencyId": "Валюта ",
             "hardwareSpecs": "Кыскача мүнөздөмөлөр",
             "modelName": "ЖИ моделинин аталышы",
             "modelPurpose": "ЖИ моделинин максаты",

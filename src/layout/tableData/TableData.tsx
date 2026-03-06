@@ -9,7 +9,6 @@ import {
   ScrollArea,
   Text,
 } from '@mantine/core';
-// import { useState } from 'react';
 import { useMantineColorScheme } from '@mantine/core';
 import { useTranslation } from "react-i18next";
 
@@ -32,7 +31,6 @@ interface TableDataProps<T> {
   onPageSizeChange: (size: number) => void;
   onAdd?: () => void;
   onFilter?: () => void;
-  onEdit?: (row: T) => void;
 }
 
  
@@ -48,7 +46,6 @@ export function TableData<T extends { id: number }>({
   onPageSizeChange,
   onAdd,
   onFilter,
-  onEdit,
 }: TableDataProps<T>) {
   const { colorScheme } = useMantineColorScheme();
   const isDark = colorScheme === "dark";
@@ -130,60 +127,73 @@ export function TableData<T extends { id: number }>({
           withTableBorder
           style={{
             borderCollapse: 'collapse',
-            minWidth: 1200 ,
-            width: '100%',
+            minWidth: '100%' ,
+            width: "max-content",
+            tableLayout: "auto",
           }}
         >
-         <thead>
+        
+          <thead>
             <tr>
-              {columns.map((col) => (
-                <th
-                  key={`header-${String(col.key)}`}
-                  style={{
-                    whiteSpace: 'nowrap',
-                    border: '1px solid #dee2e6',  
-                    padding: '8px',
-                    color: isDark ? "#ffffff" : "#000000", 
-                  }}
-                >
-                  {col.label}
-                </th>
-              ))}
-               {onEdit && (
-                  <th key="header-action">
-                    {t("tableData.actions")}
+              {columns.map((col) => {
+                
+                if (col.key === "id") {
+                  return (
+                      <th
+                        key={`header-${String(col.key)}`}
+                        style={{
+                          whiteSpace: "nowrap",
+                          border: "1px solid #dee2e6",
+                          padding: "8px",
+                          color: isDark ? "#ffffff" : "#000000",
+                        }}
+                      >
+                        {col.label}
+                      </th>
+                  );
+                }
+
+                return (
+                  <th
+                    key={`header-${String(col.key)}`}
+                    style={{
+                      whiteSpace: "nowrap",
+                      border: "1px solid #dee2e6",
+                      padding: "8px",
+                      color: isDark ? "#ffffff" : "#000000",
+                    }}
+                  >
+                    {col.label}
                   </th>
-                )}
+                );
+              })}
             </tr>
-          </thead> 
+          </thead>
+
+          
 
           <tbody>
-  {data.map((row) => (
-    <tr key={row.id}>
-      {columns.map((col) => (
-        <td key={`${row.id}-${String(col.key)}`}>
-          {col.key === "action"
-            ? col.render?.(row)
-            : col.render
-            ? col.render(row)
-            : String(row[col.key])}
-        </td>
-      ))}
-
-      {onEdit && (
-        <td key={`action-${row.id}`}>
-          <Button
-            size="xs"
-            variant="light"
-            onClick={() => onEdit(row)}
-          >
-            {t("buttons.edit")}
-          </Button>
-        </td>
-      )}
-    </tr>
-  ))}
-</tbody>
+            {data.map((row) => (
+              <tr key={row.id}>
+                {columns.map((col) => (
+                  <td
+                    key={`${row.id}-${String(col.key)}`}
+                    style={{
+                      border: `1px solid ${
+                        isDark ? "#2c2f33" : "#dee2e6"
+                      }`,
+                      padding: "8px",
+                      color: isDark ? "#ffffff" : "#000000",
+                    }}
+                  >
+                    {col.render ? col.render(row) : String(
+                      (row as Record<string, unknown>)[col.key as string] ?? ""
+                    )}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
 
         
         </Table>

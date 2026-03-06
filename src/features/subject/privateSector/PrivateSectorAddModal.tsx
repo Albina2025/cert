@@ -11,10 +11,10 @@ import { notifications } from "@mantine/notifications";
 import { BaseModal } from "../../../UI/modal/BaseModal";
 import { BaseButton } from "../../../UI/button/BaseButton";
 import { FloatingInput } from "../../../UI/input/FloatingInput";
-// import { FloatingSelect } from "../../../UI/input/FloatingSelect";
 import { useTranslation } from "react-i18next";
 import { api } from "../../../api/axios";
 import type {SectorFormValues} from "../../../types/sector/sector.form.types"
+import type { CreateSectorRequest } from "../../../types/sector/sector.request.types";
 
 interface Props {
   opened: boolean;
@@ -33,8 +33,8 @@ export const PrivateSectorAddModal: React.FC<Props> = ({
     titleRu: "",
     titleKg: "",
     address: "",
-    logo: null,
-    parentId: null,
+    logo: "",
+    parentId: undefined,
   },
 
   validate: {
@@ -63,24 +63,19 @@ export const PrivateSectorAddModal: React.FC<Props> = ({
 
   const mapToRequest = (
     values: SectorFormValues
-  ): SectorFormValues => {
+  ): CreateSectorRequest => {
     return {
       titleRu: values.titleRu,
       titleKg: values.titleKg,
       address: values.address,
-      logo: values.logo || null,
-      parentId: values.parentId
-        ? Number(values.parentId)
-        : null,
-    };
+      logo: values.logo || "",
+      parentId: values.parentId ?? undefined,
   };
+}
 
  const mutation = useMutation({
-  mutationFn: async (data: SectorFormValues) => {
-    const response = await api.post(
-      "/api/v1/sector",
-      data
-    );
+  mutationFn: async (data: CreateSectorRequest) => {
+    const response = await api.post("/api/v1/sector", data);
     return response.data;
   },
   onSuccess: () => {
@@ -110,7 +105,9 @@ export const PrivateSectorAddModal: React.FC<Props> = ({
     values: SectorFormValues
   ) => {
     mutation.mutate(mapToRequest(values));
+    console.log(mapToRequest(values));
   };
+  
 
   
 
@@ -153,6 +150,7 @@ export const PrivateSectorAddModal: React.FC<Props> = ({
 
             <Grid.Col span={6}>
               <FloatingInput
+               type="number"
                 labelText={t("privateSectorModal.fields.parent")}
                 {...form.getInputProps("parentId")}
               />

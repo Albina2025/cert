@@ -77,7 +77,6 @@ const handleReset = () => {
       />
     </Grid.Col>
 
-    {/* ================= NAME ================= */}
     <Grid.Col span={12}>
       <FloatingInput
         labelText={t("privateSectorFilter.fields.title")}
@@ -85,7 +84,6 @@ const handleReset = () => {
       />
     </Grid.Col>
 
-    {/* ================= ADDRESS ================= */}
     <Grid.Col span={12}>
       <FloatingInput
         labelText={t("privateSectorFilter.fields.address")}
@@ -147,7 +145,6 @@ const handleReset = () => {
     </Grid.Col>
 
 
-    {/* ================= BUTTONS ================= */}
     <Grid.Col span={6}>
       <BaseButton
         onClick={handleReset}

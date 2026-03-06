@@ -63,7 +63,6 @@ export const AiFilterModal = ({
     >
       <Grid gutter="md">
 
-        {/* ================= SUBJECT ================= */}
         <Grid.Col span={12}>
           <Select
             label={t("aiFilter.fields.subject")}
@@ -82,7 +81,6 @@ export const AiFilterModal = ({
           />
         </Grid.Col>
 
-        {/* ================= PLATFORM TYPE ================= */}
         <Grid.Col span={12}>
           <Select
             label={t("aiFilter.fields.platformType")}
@@ -98,7 +96,6 @@ export const AiFilterModal = ({
           />
         </Grid.Col>
 
-        {/* ================= BUTTONS ================= */}
         <Grid.Col span={6}>
           <BaseButton
             fullWidth

@@ -19,9 +19,6 @@ export const createAi = async (data: CreateAiRequest) => {
 export const searchAi  = (data: AiSearchRequest) =>
   api.post<AiSelectResponse>("/api/v1/ai/select", data);
 
-// export const deleteAi = (id: number) =>
-//   api.delete(`/api/v1/ai/${id}`);
-
 export const updateAi = (id: number, data: CreateAiRequest) =>
   api.put(`/api/v1/ai/${id}`, data);
 

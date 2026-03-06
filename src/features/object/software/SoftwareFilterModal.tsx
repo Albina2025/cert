@@ -1,39 +1,40 @@
-import { Grid, Divider} from '@mantine/core'
-import { useForm } from '@mantine/form'
-import { FloatingSelect } from '../../../UI/input/FloatingSelect'
-import { BaseModal } from '../../../UI/modal/BaseModal'
-import { BaseButton } from '../../../UI/button/BaseButton'
-import type { SoftwareFilterType } from '../../../types/dataTypes'
+import { Grid, Divider } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { FloatingSelect } from "../../../UI/input/FloatingSelect";
+import { BaseModal } from "../../../UI/modal/BaseModal";
+import { BaseButton } from "../../../UI/button/BaseButton";
 import { useTranslation } from "react-i18next";
 
+import type { SoftwareSearchRequest } from "../../../types/software/software.request.types";
+
 type Props = {
-  opened: boolean
-  onClose: () => void
-  onApply: (values: SoftwareFilterType) => void
-}
+  opened: boolean;
+  onClose: () => void;
+  onApply: (values: SoftwareSearchRequest["filter"]) => void;
+};
 
 export const SoftwareFilterModal = ({
   opened,
   onClose,
   onApply,
 }: Props) => {
-
-  const form = useForm<SoftwareFilterType>({
-    initialValues: {
-      subjectId: null,
-    },
-  })
   const { t } = useTranslation();
 
+  const form = useForm<SoftwareSearchRequest["filter"]>({
+    initialValues: {
+      ministryId: null,
+    },
+  });
+
   const handleReset = () => {
-    form.reset()
-    onClose()
-  }
+    form.reset();
+    onClose();
+  };
 
   const handleApply = () => {
-    onApply(form.values)
-    onClose()
-  }
+    onApply(form.values);
+    onClose();
+  };
 
   return (
     <BaseModal
@@ -46,7 +47,11 @@ export const SoftwareFilterModal = ({
     >
       <Grid>
         <Grid.Col span={12}>
-          <Divider size="sm" my="xs" label={t("softwareFilter.title")} />
+          <Divider
+            size="sm"
+            my="xs"
+            label={t("softwareFilter.title")}
+          />
         </Grid.Col>
 
         <Grid.Col span={12}>
@@ -54,10 +59,10 @@ export const SoftwareFilterModal = ({
             labelText={t("softwareFilter.fields.subject")}
             radius={10}
             data={[
-              { value: '1', label: 'Минфин' },
-              { value: '2', label: 'Минздрав' },
+              { value: "1", label: "Минфин" },
+              { value: "2", label: "Минздрав" },
             ]}
-            {...form.getInputProps('subjectId')}
+            {...form.getInputProps("ministryId")}
           />
         </Grid.Col>
 
@@ -65,9 +70,9 @@ export const SoftwareFilterModal = ({
           <BaseButton
             onClick={handleReset}
             fullWidth
-            variantType="primary"
+            variantType="secondary"
           >
-             {t("softwareFilter.buttons.reset")}
+            {t("softwareFilter.buttons.reset")}
           </BaseButton>
         </Grid.Col>
 
@@ -77,10 +82,10 @@ export const SoftwareFilterModal = ({
             fullWidth
             variantType="primary"
           >
-             {t("softwareFilter.buttons.apply")}
+            {t("softwareFilter.buttons.apply")}
           </BaseButton>
         </Grid.Col>
       </Grid>
     </BaseModal>
-  )
-}
+  );
+};

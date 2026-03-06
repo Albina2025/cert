@@ -1,4 +1,3 @@
-import React from 'react'
 import { AuthLoginForm } from '../../features/auth/AuthLoginForm'
 
 export const LoginPage = () => {

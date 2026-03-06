@@ -32,9 +32,6 @@ console.log("BASE URL:", import.meta.env.VITE_APP_API_TEST);
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     const token = localStorage.getItem("accessToken");
-
-    // console.log("ACCESS:", token);
-
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -67,10 +64,6 @@ api.interceptors.response.use(
       }
 
       try {
-        // const res = await axios.post<RefreshResponse>(
-        //   `${import.meta.env.VITE_APP_API_TEST}/api/v1/auth/refresh-token`,
-        //   { refreshToken }
-        // );
         const res = await api.post<RefreshResponse>("/api/v1/auth/refresh-token", 
           {refreshToken}
         );

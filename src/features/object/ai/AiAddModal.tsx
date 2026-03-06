@@ -123,7 +123,7 @@ export const AiAddModal: React.FC<AiAddModalProps> = ({
           <form onSubmit={form.onSubmit(handleSubmit)}>
             <Stack gap="xl">
 
-              {/* ================= HARDWARE ================= */}
+          
               <Box p="md" style={{ border: "1px solid #303d43", borderRadius: 8 }}>
                 <Stack gap="md">
 
@@ -156,7 +156,7 @@ export const AiAddModal: React.FC<AiAddModalProps> = ({
                 </Stack>
               </Box>
 
-              {/* ================= MODEL ================= */}
+         
               <Box p="md" style={{ border: "1px solid #303d43", borderRadius: 8 }}>
                 <Stack gap="md">
 
@@ -181,7 +181,7 @@ export const AiAddModal: React.FC<AiAddModalProps> = ({
                 </Stack>
               </Box>
 
-              {/* ================= API ================= */}
+         
               <Box p="md" style={{ border: "1px solid #303d43", borderRadius: 8 }}>
                 <Stack gap="md">
 

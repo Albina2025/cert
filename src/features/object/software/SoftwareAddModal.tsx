@@ -1,5 +1,3 @@
-
-
 import {
   Stack,
   Group,
@@ -33,7 +31,6 @@ export const SoftwareAddModal: React.FC<Props> = ({
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
-  // ================= FORM =================
   const form = useForm<SoftwareFormValues>({
     initialValues: {
       ministryId: "",
@@ -52,7 +49,7 @@ export const SoftwareAddModal: React.FC<Props> = ({
     },
   });
 
-  // ================= MAP TO REQUEST =================
+
   const mapToRequest = (
     values: SoftwareFormValues
   ): SoftwareCreateRequest => {
@@ -73,7 +70,6 @@ export const SoftwareAddModal: React.FC<Props> = ({
     };
   };
 
-  // ================= MUTATION =================
   const mutation = useMutation({
     mutationFn: createSoftware,
     onSuccess: () => {
@@ -119,7 +115,6 @@ export const SoftwareAddModal: React.FC<Props> = ({
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <Grid>
 
-            {/* Ministry */}
             <Grid.Col span={6}>
               <FloatingInput
                 type="number"

@@ -23,30 +23,15 @@
         "filters": "Фильтры",
         "add": "Добавить",
         "totalData": "Всего данных",
-        "noData": "Нет данных"
+        "noData": "Нет данных",
+        "actions": "Действия"
     },
-    "object": {
-        "ai": {
-            "action": "Действия",
-            "apiUsage": "Используется API",
-            "subject": "Субъект",
-            "platformType": "Тип вычислительной платформы",
-            "equipmentName": "Наименование оборудования",
-            "equipmentPurpose": "Назначение оборудования",
-            "ownerDepartment": "Ответственное подразделение-владелец",
-            "equipmentSupplier": "Поставщик оборудования",
-            "purchaseDate": "Дата приобретения",
-            "purchaseAmount": "Сумма приобретения",
-            "currency": "Валюта суммы",
-            "shortCharacteristics": "Краткие характеристики",
-            "aiModelName": "Наименование модели ИИ",
-            "aiModelPurpose": "Назначение модели ИИ",
-            "aiModelDeveloper": "Разработчик / поставщик модели ИИ",
-            "apiProvider": "Поставщик API (если используется)"
-        }
+    "buttons": {
+        "edit": "Редактировать"
     },
     "privateSectorModal": {
         "title": "Добавить частный  сектор",
+        "editTitle": "Редактировать частный сектор",
         "fields": {
             "titleRu": "Наименование на русском",
             "titleKg": "Наименование на кыргызском",
@@ -78,19 +63,19 @@
         "editTitle": "Редактирование ПО",
 
         "fields": {
-        "subject": "Субъект",
-        "name": "Название ПО",
-        "purpose": "Назначение ПО",
-        "manufacturer": "Производитель",
-        "supplier": "Поставщик",
-        "purchaseDate": "Дата приобретения",
-        "purchaseAmount": "Сумма приобретения",
-        "currency": "Валюта",
-        "softwareVersion": "Версия",
-        "lastUpdateDate": "Дата последнего обновления",
-        "licenseExpiryDate": "Дата окончания лицензии",
-        "licenseType": "Тип лицензии",
-        "licenseCount": "Количество лицензий"
+            "subject": "Субъект",
+            "name": "Название ПО",
+            "purpose": "Назначение ПО",
+            "manufacturer": "Производитель",
+            "supplier": "Поставщик",
+            "purchaseDate": "Дата приобретения",
+            "purchaseAmount": "Сумма приобретения",
+            "purchaseCurrency": "Валюта покупки",
+            "softwareVersion": "Версия",
+            "lastUpdateDate": "Дата последнего обновления",
+            "licenseExpiryDate": "Дата окончания лицензии",
+            "licenseType": "Тип лицензии",
+            "licenseCount": "Количество лицензий"
         },
 
         "licenseOptions": {
@@ -112,11 +97,7 @@
 
         "buttons": {
         "cancel": "Отменить",
-        "confirm": "Подтвердить",
-        "save": "Сохранить"
-        },
-        "software": {
-            "action": "Действия"
+        "confirm": "Подтвердить"
         }
     },
 
@@ -136,18 +117,19 @@
         "hardware": "Аппаратная платформа (железо)",
         "model": "Модель искусственного интеллекта",
         "title": "Добавление ИИ",
+        "editTitle": "Редактировать ИИ",
 
         "fields": {
             "actions": "Дейсдвия",
-            "ministryId": "Субъект",
-            "computePlatformTypeId": "Тип вычислительной платформы",
+            "ministryId": "Министерство ",
+            "computePlatformTypeId": "Тип вычислительной платформы ",
             "hardwareName": "Наименование оборудования",
             "hardwarePurpose": "Назначение оборудования",
             "responsibleUnit": "Ответственное подразделение",
             "hardwareSupplier": "Поставщик оборудования",
             "purchaseDate": "Дата приобретения",
             "purchaseAmount": "Сумма приобретения",
-            "purchaseCurrencyId": "Валюта",
+            "purchaseCurrencyId": "Валюта  ",
             "hardwareSpecs": "Краткие характеристики",
             "modelName": "Наименование модели ИИ",
             "modelPurpose": "Назначение модели ИИ",

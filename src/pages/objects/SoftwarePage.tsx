@@ -1,97 +1,16 @@
-// import { useState, useMemo } from 'react'
-// import { useSelector } from 'react-redux'
-// import { useTranslation } from 'react-i18next'
-// import { TableData } from '../../layout/tableData/TableData'
-// import { SoftwareAddModal } from '../../features/object/software/SoftwareAddModal'
-// import { SoftwareFilterModal } from '../../features/object/software/SoftwareFilterModal'
-// import type { RootState } from '../../store'
-// import type { SoftwareType } from '../../types/dataTypes'
-// import type { SoftwareFilterType } from '../../types/dataTypes'
-
-// export const SoftwarePage: React.FC = () => {
-//   const [openedAdd, setOpenedAdd] = useState(false)
-//   const [openedFilter, setOpenedFilter] = useState(false)
-//   const { t } = useTranslation()
-
-
-//   const [filter, setFilter] = useState<SoftwareFilterType>({
-//     subjectId: null,
-//   })
-
-//   const handleApplyFilter = (values: SoftwareFilterType) => {
-//     setFilter(values)
-//   }
-
-//   const allItems = useSelector((state: RootState) => state.data.items)
-
-
-//   const softwareData: SoftwareType[] = useMemo(() => {
-//     const onlySoftware = allItems
-//       .filter((item) => item.type === 'software')
-//       .map((item) => item.data as SoftwareType)
-
-//     return onlySoftware.filter((item) => {
-//       const subjectMatch =
-//         !filter.subjectId || item.subject === filter.subjectId
-
-//       return subjectMatch
-//     })
-//   }, [allItems, filter])
-
-//    const columns: { key: keyof SoftwareType | 'action'; label: string }[] = [
-//     { key: 'action', label: t('object.software.action') },
-//     { key: 'subject', label: t('object.software.subject') },
-//     { key: 'name', label: t('object.software.name') },
-//     { key: 'purpose', label: t('object.software.purpose') },
-//     { key: 'manufacturer', label: t('object.software.manufacturer') },
-//     { key: 'supplier', label: t('object.software.supplier') },
-//     { key: 'purchaseDate', label: t('object.software.purchaseDate') },
-//     { key: 'purchaseAmount', label: t('object.software.purchaseAmount') },
-//     { key: 'currency', label: t('object.software.currency') },
-//     { key: 'lastUpdateDate', label: t('object.software.lastUpdateDate') },
-//     { key: 'licenseEndDate', label: t('object.software.licenseEndDate') },
-//     { key: 'version', label: t('object.software.version') },
-//     { key: 'licenseType', label: t('object.software.licenseType') },
-//     { key: 'licenseCount', label: t('object.software.licenseCount') },
-//   ]
-
-//   return (
-//     <>
-//       <TableData
-//         columns={columns}
-//         data={softwareData}
-//         onAdd={() => setOpenedAdd(true)}
-//         onFilter={() => setOpenedFilter(true)}
-//       />
-
-//       <SoftwareAddModal
-//         opened={openedAdd}
-//         onClose={() => setOpenedAdd(false)}
-//       />
-
-//       <SoftwareFilterModal
-//         opened={openedFilter}
-//         onClose={() => setOpenedFilter(false)}
-//         onApply={handleApplyFilter}
-//       />
-//     </>
-//   )
-// }
-
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-
+import { Menu, Button, Flex } from "@mantine/core";
+import { useMantineColorScheme } from "@mantine/core";
+import {  IconChevronRight, IconMenu2 } from "@tabler/icons-react";
 import { TableData, type Column } from "../../layout/tableData/TableData";
 import { SoftwareAddModal } from "../../features/object/software/SoftwareAddModal";
 import { SoftwareEditModal } from "../../features/object/software/SoftwareEditeModal";
 import { SoftwareFilterModal } from "../../features/object/software/SoftwareFilterModal";
-
 import { getSoftwareList } from "../../services/software.service";
-
 import type {SoftwareSearchRequest } from "../../types/software/software.request.types";
 import type { SoftwareSearchResponse } from "../../types/software/software.response.types";
-
 import type { SoftwareItem } from "../../types/software/software.response.types";
 
 export const SoftwarePage: React.FC = () => {
@@ -106,16 +25,13 @@ export const SoftwarePage: React.FC = () => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
-  const [filter, setFilter] = useState<{
-    ministryId: number | null;
-  }>({
+  const [filter, setFilter] = useState<SoftwareSearchRequest["filter"]>({
     ministryId: null,
   });
+  const { colorScheme } = useMantineColorScheme();
+  const isDark = colorScheme === "dark";
 
-  // ================= SEARCH =================
- const { data, isLoading } = useQuery<
-  SoftwareSearchResponse
->({
+ const { data, isLoading } = useQuery<SoftwareSearchResponse>({
   queryKey: ["software", page, pageSize, filter],
   queryFn: async () => {
     const request: SoftwareSearchRequest = {
@@ -135,9 +51,50 @@ export const SoftwarePage: React.FC = () => {
   },
 });
 
-  // ================= COLUMNS =================
  const columns: Column<SoftwareItem>[] = [
   { key: "id", label: "ID" },
+  {
+    key: "action",
+    label: t("tableData.actions"),
+    render: (row) => (
+      <Flex justify="center"> 
+      <Menu shadow="md" width={160} position="bottom-end">
+        <Menu.Target>
+          <Button
+            size="xs"
+            radius="md"
+            rightSection={<IconChevronRight size={14} />}
+            style={{
+              backgroundColor: isDark ? "#ffffff" : "#000000",
+              color: isDark ? "#000000" : "#ffffff",
+            }}
+          >
+
+            <IconMenu2 size={18} />
+          </Button>
+        </Menu.Target>
+
+        <Menu.Dropdown
+          style={{
+            backgroundColor: isDark ? "#1c1f23" : "#ffffff",
+          }}
+        >
+          <Menu.Item
+            style={{
+              color: isDark ? "#ffffff" : "#000000",
+            }}
+            onClick={() => {
+              setEditId(row.id);
+              setOpenedEdit(true);
+            }}
+          >
+            {t("buttons.edit")}
+          </Menu.Item>
+        </Menu.Dropdown>
+      </Menu>
+      </Flex>
+    ),
+  },
 
   {
     key: "ministryDto",
@@ -152,28 +109,12 @@ export const SoftwarePage: React.FC = () => {
 
   {
     key: "softwareVersion",
-    label: t("softwareModal.fields.version"),
+    label: t("softwareModal.fields.softwareVersion"),
   },
 
   {
     key: "licenseType",
     label: t("softwareModal.fields.licenseType"),
-  },
-
-  // 🔥 Action колонка
-  {
-    key: "id",
-    label: t("softwareModal.software.action"),
-    render: (row) => (
-      <button
-        onClick={() => {
-          setEditId(row.id);
-          setOpenedEdit(true);
-        }}
-      >
-        {t("softwareModal.buttons.save")}
-      </button>
-    ),
   },
 ];
 
@@ -195,8 +136,6 @@ export const SoftwarePage: React.FC = () => {
         onAdd={() => setOpenedAdd(true)}
         onFilter={() => setOpenedFilter(true)}
       />
-
-      {/* ================= MODALS ================= */}
 
       <SoftwareAddModal
         opened={openedAdd}

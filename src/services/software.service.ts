@@ -1,8 +1,5 @@
 import { api } from "../api/axios";
-import type {
-  SoftwareCreateRequest,
-  SoftwareSearchRequest,
-} from "../types/software/software.request.types";
+import type {SoftwareCreateRequest,SoftwareSearchRequest} from "../types/software/software.request.types";
 
 export const createSoftware = (data: SoftwareCreateRequest) =>
   api.post("/api/v1/software", data);
@@ -16,5 +13,3 @@ export const getSoftwareById = (id: number) =>
 export const updateSoftware = (id: number, data: SoftwareCreateRequest) =>
   api.put(`/api/v1/software/${id}`, data);
 
-export const deleteSoftware = (id: number) =>
-  api.delete(`/api/v1/software/${id}`);

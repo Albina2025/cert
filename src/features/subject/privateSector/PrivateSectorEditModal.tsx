@@ -1,15 +1,29 @@
 import { useEffect } from "react";
-import { Stack, Group, Box, Grid, Title } from "@mantine/core";
+import {
+  Stack,
+  Group,
+  Box,
+  Grid,
+  Title,
+  Divider,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { notifications } from "@mantine/notifications";
 import { useTranslation } from "react-i18next";
+
 import { BaseModal } from "../../../UI/modal/BaseModal";
 import { BaseButton } from "../../../UI/button/BaseButton";
 import { FloatingInput } from "../../../UI/input/FloatingInput";
-import { getSectorById, updateSector } from "../../../services/sector.service";
+
+import {
+  getSectorById,
+  updateSector,
+} from "../../../services/sector.service";
+
+import type { SectorFormValues } from "../../../types/sector/sector.form.types";
 import type { CreateSectorRequest } from "../../../types/sector/sector.request.types";
-import type { SectorItem } from "../../../types/sector.types";
+import type { SectorItem } from "../../../types/sector/sector.response.types";
 
 interface Props {
   opened: boolean;
@@ -25,7 +39,7 @@ export const PrivateSectorEditModal: React.FC<Props> = ({
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
-  const form = useForm<CreateSectorRequest>({
+  const form = useForm<SectorFormValues>({
     initialValues: {
       titleRu: "",
       titleKg: "",
@@ -33,9 +47,31 @@ export const PrivateSectorEditModal: React.FC<Props> = ({
       logo: "",
       parentId: undefined,
     },
+
+    validate: {
+      titleRu: (value) =>
+        value.trim().length === 0
+          ? t("validation.required")
+          : value.length > 255
+          ? t("validation.max255")
+          : null,
+
+      titleKg: (value) =>
+        value.trim().length === 0
+          ? t("validation.required")
+          : value.length > 255
+          ? t("validation.max255")
+          : null,
+
+      address: (value) =>
+        value.trim().length === 0
+          ? t("validation.required")
+          : value.length > 255
+          ? t("validation.max255")
+          : null,
+    },
   });
 
-  // ================= GET BY ID =================
   const { data } = useQuery<SectorItem>({
     queryKey: ["sector", sectorId],
     queryFn: () => getSectorById(sectorId!),
@@ -44,21 +80,33 @@ export const PrivateSectorEditModal: React.FC<Props> = ({
 
   useEffect(() => {
     if (data) {
-        form.setValues({
-        titleRu: data.titleRu,
-        titleKg: data.titleKg,
-        address: data.address,
-        logo: "",
-        parentId: data.parent?.id ?? undefined, 
-        });
+      form.setValues({
+        titleRu: data.titleRu ?? "",
+        titleKg: data.titleKg ?? "",
+        address: data.address ?? "",
+        logo: data.logo ?? "",
+        parentId: data.parent?.id ?? undefined,
+      });
     }
-    }, [data]);
+  }, [data]);
 
-
+  const mapToRequest = (
+    values: SectorFormValues
+  ): CreateSectorRequest => {
+    return {
+      titleRu: values.titleRu,
+      titleKg: values.titleKg,
+      address: values.address,
+      logo: values.logo || "",
+      parentId: values.parentId ?? undefined,
+    };
+  };
 
   const mutation = useMutation({
-     mutationFn: (values: CreateSectorRequest) =>
-    updateSector(sectorId!, values),
+    mutationFn: async (data: CreateSectorRequest) => {
+      const response = await updateSector(sectorId!, data);
+      return response;
+    },
 
     onSuccess: () => {
       notifications.show({
@@ -67,13 +115,22 @@ export const PrivateSectorEditModal: React.FC<Props> = ({
         color: "green",
       });
 
-      queryClient.invalidateQueries({ queryKey: ["privateSector"] });
+      queryClient.invalidateQueries({ queryKey: ["sector"] });
+      form.reset();
       onClose();
+    },
+
+    onError: () => {
+      notifications.show({
+        title: t("notifications.error"),
+        message: t("notifications.somethingWrong"),
+        color: "red",
+      });
     },
   });
 
-  const handleSubmit = (values: CreateSectorRequest) => {
-     mutation.mutate(values);
+  const handleSubmit = (values: SectorFormValues) => {
+    mutation.mutate(mapToRequest(values));
   };
 
   return (
@@ -85,12 +142,20 @@ export const PrivateSectorEditModal: React.FC<Props> = ({
       withCloseButton={false}
     >
       <Stack>
-        <form onSubmit={form.onSubmit(handleSubmit)}>
-          <Box p="md" style={{ border: "1px solid #303d43", borderRadius: 8 }}>
-            <Title order={5} ta="center" mb="md">
-              {t("privateSectorModal.editTitle")}
-            </Title>
+        <Box
+          p="md"
+          style={{
+            border: "1px solid #303d43",
+            borderRadius: 8,
+          }}
+        >
+          <Title order={5} ta="center" mb="md">
+            {t("privateSectorModal.editTitle")}
+          </Title>
 
+          <Divider />
+
+          <form onSubmit={form.onSubmit(handleSubmit)}>
             <Grid>
               <Grid.Col span={6}>
                 <FloatingInput
@@ -108,38 +173,46 @@ export const PrivateSectorEditModal: React.FC<Props> = ({
 
               <Grid.Col span={6}>
                 <FloatingInput
+                  type="number"
+                  labelText={t("privateSectorModal.fields.parent")}
+                  {...form.getInputProps("parentId")}
+                />
+              </Grid.Col>
+
+              <Grid.Col span={6}>
+                <FloatingInput
                   labelText={t("privateSectorModal.fields.address")}
                   {...form.getInputProps("address")}
                 />
               </Grid.Col>
 
-              <Grid.Col span={6}>
+              <Grid.Col span={12}>
                 <FloatingInput
                   labelText={t("privateSectorModal.fields.logo")}
                   {...form.getInputProps("logo")}
                 />
               </Grid.Col>
             </Grid>
-          </Box>
 
-          <Group justify="center" mt="md">
-            <BaseButton
-              variantType="secondary"
-              type="button"
-              onClick={onClose}
-            >
-              {t("privateSectorModal.buttons.cancel")}
-            </BaseButton>
+            <Group justify="center" mt="md">
+              <BaseButton
+                variantType="secondary"
+                type="button"
+                onClick={onClose}
+              >
+                {t("privateSectorModal.buttons.cancel")}
+              </BaseButton>
 
-            <BaseButton
-              variantType="primary"
-              type="submit"
-              loading={mutation.isPending}
-            >
-              {t("privateSectorModal.buttons.confirm")}
-            </BaseButton>
-          </Group>
-        </form>
+              <BaseButton
+                variantType="primary"
+                type="submit"
+                loading={mutation.isPending}
+              >
+                {t("privateSectorModal.buttons.confirm")}
+              </BaseButton>
+            </Group>
+          </form>
+        </Box>
       </Stack>
     </BaseModal>
   );

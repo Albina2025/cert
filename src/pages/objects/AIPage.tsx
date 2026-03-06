@@ -1,47 +1,41 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-
 import { TableData } from "../../layout/tableData/TableData";
 import { AiAddModal } from "../../features/object/ai/AiAddModal";
 import { AiFilterModal } from "../../features/object/ai/AiFilterModal";
-
 import { api } from "../../api/axios";
-
-import type {
-  AiSearchRequest,
-} from "../../types/ai/ai.request.types";
+import type {AiSearchRequest} from "../../types/ai/ai.request.types";
 import type {  AiSearchResponse} from "../../types/ai/ai.response.types";
 import type { AiItem} from "../../types/ai/ai.item.types";
 import type { Column } from "../../layout/tableData/TableData";
 import { AiEditModal } from "../../features/object/ai/AiEditModal";
+import { Button, Flex, Menu, useMantineColorScheme } from "@mantine/core";
+import { IconChevronRight, IconMenu2 } from "@tabler/icons-react";
 
 export const AIPage: React.FC = () => {
   const { t } = useTranslation();
-
   const [openedAdd, setOpenedAdd] = useState(false);
   const [openedFilter, setOpenedFilter] = useState(false);
   const [editId, setEditId] = useState<number | null>(null);
   const [openedEdit, setOpenedEdit] = useState(false);
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState(10);
+    const { colorScheme } = useMantineColorScheme();
+    const isDark = colorScheme === "dark";
 
-  // ✅ Filter (backendке дал келген)
   const [filter, setFilter] =
     useState<AiSearchRequest["filter"]>({
       ministryId: null,
       computePlatformTypeId: null,
     });
 
-  // ==============================
-  // 🔥 BACKEND SEARCH
-  // ==============================
+
   const { data, isLoading } = useQuery<AiSearchResponse<AiItem>>({
     queryKey: [
       "ai", 
       page, 
       pageSize,  
-      // filter
       filter?.ministryId,
       filter?.computePlatformTypeId,
     ],
@@ -55,7 +49,6 @@ export const AIPage: React.FC = () => {
           sortBy: "ID",
           sortDirection: "ASC",
         },
-        // filter: filter,
         filter,
       };
 
@@ -64,54 +57,96 @@ export const AIPage: React.FC = () => {
     },
   });
 
-  // ==============================
-  // TABLE COLUMNS
-  // ==============================
 
   const columns: Column<AiItem>[] = [
-  {
-    key: "id",
-    label: "ID",
-  },
+    {
+      key: "id",
+      label: "ID",
+    },
 
-  {
-    key: "ministryDto",
-    label: t("aiModal.fields.ministryId"),
-    render: (row) => row.ministryDto?.titleRu,
-  },
+    {
+      key: "action",
+      label: t("tableData.actions"),
+      render: (row) => (
+        <Flex justify="center"> 
+        <Menu shadow="md" width={160} position="bottom-end">
+          <Menu.Target>
+            <Button
+              size="xs"
+              radius="md"
+              rightSection={<IconChevronRight size={14} />}
+              style={{
+                backgroundColor: isDark ? "#ffffff" : "#000000",
+                color: isDark ? "#000000" : "#ffffff",
+              }}
+            >
 
-  {
-    key: "computePlatformType",
-    label: t("aiModal.fields.computePlatformTypeId"),
-    render: (row) => row.computePlatformType?.titleRu,
-  },
+              <IconMenu2 size={18} />
+            </Button>
+          </Menu.Target>
 
-  { key: "hardwareName", label: t("aiModal.fields.hardwareName") },
-  { key: "hardwarePurpose", label: t("aiModal.fields.hardwarePurpose") },
-  { key: "responsibleUnit", label: t("aiModal.fields.responsibleUnit") },
-  { key: "hardwareSupplier", label: t("aiModal.fields.hardwareSupplier") },
+          <Menu.Dropdown
+            style={{
+              backgroundColor: isDark ? "#1c1f23" : "#ffffff",
+            }}
+          >
+            <Menu.Item
+              style={{
+                color: isDark ? "#ffffff" : "#000000",
+              }}
+              onClick={() => {
+                setEditId(row.id);
+                setOpenedEdit(true);
+              }}
+            >
+              {t("buttons.edit")}
+            </Menu.Item>
+          </Menu.Dropdown>
+        </Menu>
+        </Flex>
+      ),
+    },
 
-  { key: "purchaseDate", label: t("aiModal.fields.purchaseDate") },
-  { key: "purchaseAmount", label: t("aiModal.fields.purchaseAmount") },
 
-  {
-    key: "purchaseCurrency",
-    label: t("aiModal.fields.purchaseCurrencyId"),
-    render: (row) => row.purchaseCurrency?.titleRu,
-  },
 
-  { key: "hardwareSpecs", label: t("aiModal.fields.hardwareSpecs") },
-  { key: "modelName", label: t("aiModal.fields.modelName") },
-  { key: "modelPurpose", label: t("aiModal.fields.modelPurpose") },
-  { key: "modelDeveloper", label: t("aiModal.fields.modelDeveloper") },
+    {
+      key: "ministryDto",
+      label: t("aiModal.fields.ministryId"),
+      render: (row) => row.ministryDto?.titleRu,
+    },
 
-  {
-    key: "usesApi",
-    label: t("aiModal.fields.usesApi"),
-    render: (row) => (row.usesApi ? "Yes" : "No"),
-  },
+    {
+      key: "computePlatformType",
+      label: t("aiModal.fields.computePlatformTypeId"),
+      render: (row) => row.computePlatformType?.titleRu,
+    },
 
-  { key: "apiProvider", label: t("aiModal.fields.apiProvider") },
+    { key: "hardwareName", label: t("aiModal.fields.hardwareName") },
+    { key: "hardwarePurpose", label: t("aiModal.fields.hardwarePurpose") },
+    { key: "responsibleUnit", label: t("aiModal.fields.responsibleUnit") },
+    { key: "hardwareSupplier", label: t("aiModal.fields.hardwareSupplier") },
+
+    { key: "purchaseDate", label: t("aiModal.fields.purchaseDate") },
+    { key: "purchaseAmount", label: t("aiModal.fields.purchaseAmount") },
+
+    {
+      key: "purchaseCurrency",
+      label: t("aiModal.fields.purchaseCurrencyId"),
+      render: (row) => row.purchaseCurrency?.titleRu,
+    },
+
+    { key: "hardwareSpecs", label: t("aiModal.fields.hardwareSpecs") },
+    { key: "modelName", label: t("aiModal.fields.modelName") },
+    { key: "modelPurpose", label: t("aiModal.fields.modelPurpose") },
+    { key: "modelDeveloper", label: t("aiModal.fields.modelDeveloper") },
+
+    {
+      key: "usesApi",
+      label: t("aiModal.fields.usesApi"),
+      render: (row) => (row.usesApi ? "Yes" : "No"),
+    },
+
+    { key: "apiProvider", label: t("aiModal.fields.apiProvider") },
 ];
 
   return (
@@ -131,10 +166,6 @@ export const AIPage: React.FC = () => {
         }}
         onAdd={() => setOpenedAdd(true)}
         onFilter={() => setOpenedFilter(true)}
-        onEdit={(row) => {
-          setEditId(row.id);
-          setOpenedEdit(true);
-        }}
       />
 
       <AiAddModal

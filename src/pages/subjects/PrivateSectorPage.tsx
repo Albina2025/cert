@@ -1,108 +1,16 @@
-// import { useState, useMemo } from 'react'
-// import { useSelector } from 'react-redux'
-// import { useTranslation } from 'react-i18next'
-// import { TableData } from '../../layout/tableData/TableData'
-// import { PrivateSectorAddModal } from '../../features/subject/privateSector/PrivateSectorAddModal'
-// import { PrivateSectorFilterModal } from '../../features/subject/privateSector/PrivateSectorFilterModal'
-// import type { RootState } from '../../store'
-// import type {
-//   PrivateSectorType,
-//   PrivateSectorFilterType,
-// } from '../../types/dataTypes'
-
-// export const PrivateSectorPage: React.FC = () => {
-//   const [openedAdd, setOpenedAdd] = useState(false)
-//   const [openedFilter, setOpenedFilter] = useState(false)
-//   const { t } = useTranslation()
-
-
-//   const [filter, setFilter] =
-//     useState<PrivateSectorFilterType | null>(null)
-
-//   const allItems = useSelector(
-//     (state: RootState) => state.data.items
-//   )
-
-//   const privateData = useMemo(() => {
-//     return allItems
-//       .filter((item) => item.type === 'privateSector')
-//       .map((item) => item.data as PrivateSectorType)
-//       .filter((item) => {
-//         if (!filter) return true
-
-//         if (
-//           filter.name &&
-//           !item.subject
-//             ?.toLowerCase()
-//             .includes(filter.name.toLowerCase())
-//         ) {
-//           return false
-//         }
-
-//         if (
-//           filter.address &&
-//           !item.purpose
-//             ?.toLowerCase()
-//             .includes(filter.address.toLowerCase())
-//         ) {
-//           return false
-//         }
-
-//         return true
-//       })
-//   }, [allItems, filter])
-
-//   const columns: { key: keyof PrivateSectorType; label: string }[] =
-//     [
-//       { key: 'subject', label: t('privateSectorModal.fields.name') },
-//       { key: 'name', label: t('privateSectorModal.fields.parent') },
-//       { key: 'purpose', label: t('privateSectorModal.fields.address') },
-//       { key: 'status', label: t('privateSectorModal.fields.status') },
-//     ]
-
-//   return (
-//     <>
-//       <TableData
-//         columns={columns}
-//         data={privateData}
-//         onAdd={() => setOpenedAdd(true)}
-//         onFilter={() => setOpenedFilter(true)}
-//       />
-
-//       <PrivateSectorAddModal
-//         opened={openedAdd}
-//         onClose={() => setOpenedAdd(false)}
-//       />
-
-//       <PrivateSectorFilterModal
-//         opened={openedFilter}
-//         onClose={() => setOpenedFilter(false)}
-//         onApply={(values) => setFilter(values)}
-//       />
-//     </>
-//   )
-// }
-
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-
 import { TableData } from "../../layout/tableData/TableData";
 import { PrivateSectorAddModal } from "../../features/subject/privateSector/PrivateSectorAddModal";
 import { PrivateSectorFilterModal } from "../../features/subject/privateSector/PrivateSectorFilterModal";
 import { api } from "../../api/axios";
-
-import type {
-  SectorSearchRequest,
-} from "../../types/sector/sector.request.types";
-
-import type {
-  SectorItem,
-  SectorSearchResponse,
-} from "../../types/sector/sector.response.types";
-
+import type {SectorSearchRequest} from "../../types/sector/sector.request.types";
+import type {SectorItem, SectorSearchResponse} from "../../types/sector/sector.response.types";
 import type { Column } from "../../layout/tableData/TableData";
 import { PrivateSectorEditModal } from "../../features/subject/privateSector/PrivateSectorEditModal";
+import { Button, Flex, Menu, useMantineColorScheme } from "@mantine/core";
+import { IconChevronRight, IconMenu2 } from "@tabler/icons-react";
 
 export const PrivateSectorPage: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -114,6 +22,8 @@ export const PrivateSectorPage: React.FC = () => {
 
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+    const { colorScheme } = useMantineColorScheme();
+    const isDark = colorScheme === "dark";
 
   const [filter, setFilter] =
   useState<SectorSearchRequest["filter"]>({
@@ -124,9 +34,7 @@ export const PrivateSectorPage: React.FC = () => {
     auditedMinistries: undefined,
   });
 
-  // =========================
-  // 🔥 SEARCH REQUEST
-  // =========================
+
   const { data, isLoading } = useQuery<SectorSearchResponse>({
     queryKey: ["privateSector", page, pageSize, filter],
     queryFn: async () => {
@@ -151,56 +59,95 @@ export const PrivateSectorPage: React.FC = () => {
     },
   });
 
-  // =========================
-  // TABLE COLUMNS
-  // =========================
   
   const columns: Column<SectorItem>[] = [
-  {
-    key: "id",
-    label: "ID",
-  },
+    {
+      key: "id",
+      label: "ID",
+    },
 
-  // ================= TITLE =================
-  {
-    key: "titleRu",
-    label: t("privateSectorModal.fields.titleRu"),
-    render: (row) =>
-      i18n.language === "kg"
-        ? row.titleKg
-        : row.titleRu,
-  },
+      {
+      key: "action",
+      label: t("tableData.actions"),
+      render: (row) => (
+        <Flex justify="center"> 
+        <Menu shadow="md" width={160} position="bottom-end">
+          <Menu.Target>
+            <Button
+              size="xs"
+              radius="md"
+              rightSection={<IconChevronRight size={14} />}
+              style={{
+                backgroundColor: isDark ? "#ffffff" : "#000000",
+                color: isDark ? "#000000" : "#ffffff",
+              }}
+            >
 
-   {
-    key: "titleKg",
-    label: t("privateSectorModal.fields.titleKg"),
-    render: (row) =>
-      i18n.language === "kg"
-        ? row.titleKg
-        : row.titleRu,
-  },
- 
-  {
-    key: "parent",
-    label: t("privateSectorModal.fields.parent"),
-    render: (row) =>
-      row.parent
-        ? i18n.language === "kg"
-          ? row.parent.titleKg
-          : row.parent.titleRu
-        : "-",
-  },
+              <IconMenu2 size={18} />
+            </Button>
+          </Menu.Target>
 
- 
-  {
-    key: "address",
-    label: t("privateSectorModal.fields.address"),
-  },
+          <Menu.Dropdown
+            style={{
+              backgroundColor: isDark ? "#1c1f23" : "#ffffff",
+            }}
+          >
+            <Menu.Item
+              style={{
+                color: isDark ? "#ffffff" : "#000000",
+              }}
+              onClick={() => {
+                setEditId(row.id);
+                setOpenedEdit(true);
+              }}
+            >
+              {t("buttons.edit")}
+            </Menu.Item>
+          </Menu.Dropdown>
+        </Menu>
+        </Flex>
+      ),
+    },
 
-   {
-    key: "logo",
-    label: t("privateSectorModal.fields.logo"),
-  },
+    {
+      key: "titleRu",
+      label: t("privateSectorModal.fields.titleRu"),
+      render: (row) =>
+        i18n.language === "kg"
+          ? row.titleKg
+          : row.titleRu,
+    },
+
+    {
+      key: "titleKg",
+      label: t("privateSectorModal.fields.titleKg"),
+      render: (row) =>
+        i18n.language === "kg"
+          ? row.titleKg
+          : row.titleRu,
+    },
+  
+    {
+      key: "parent",
+      label: t("privateSectorModal.fields.parent"),
+      render: (row) =>
+        row.parent
+          ? i18n.language === "kg"
+            ? row.parent.titleKg
+            : row.parent.titleRu
+          : "-",
+    },
+
+  
+    {
+      key: "address",
+      label: t("privateSectorModal.fields.address"),
+    },
+
+    {
+      key: "logo",
+      label: t("privateSectorModal.fields.logo"),
+    },
 ];
 
   return (
@@ -220,10 +167,6 @@ export const PrivateSectorPage: React.FC = () => {
         }}
         onAdd={() => setOpenedAdd(true)}
         onFilter={() => setOpenedFilter(true)}
-        onEdit={(row) => {
-          setEditId(row.id);
-          setOpenedEdit(true);
-        }}
       />
 
       <PrivateSectorAddModal
