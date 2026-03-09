@@ -18,6 +18,8 @@ import { setTokens } from "../../store/authSlice";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
 import type { AxiosError } from "axios";
 import { useMantineColorScheme } from '@mantine/core';
+import logoLight from '../../assets/logoLight.svg'
+import logoDark from '../../assets/logoDark.svg'
 
 export const AuthLoginForm = () => {
     const [username, setUsername] = useState("");
@@ -73,7 +75,7 @@ export const AuthLoginForm = () => {
            p="xl"
           style={{
             background: isDark ? "#161d21" : "#fdfdfd",
-            width: 1100,
+            width: 1000,
             padding: "32px 16px 32px 16px",
           }}
         >
@@ -91,21 +93,15 @@ export const AuthLoginForm = () => {
                 gap: "10px",
               }}
             >
-              <img
-                 src={
-                    isDark
-                    ? "http://10.111.70.97:3003/public/logo_light.svg"
-                    : "http://10.111.70.97:3003/public/logo_dark.svg"
-                }
-                alt="logo"
-                style={{ width: 200 }}
-                
-              />
 
-           
+                <img
+                  src={isDark ?   logoLight : logoDark}
+                  alt="logo"
+                  style={{ width: 200 }}
+                />
      
               <Text
-                size="lg"
+                size="md"
                 c={isDark ? "white" : "dark"}
                 style={{
                   textAlign: "center",
@@ -118,7 +114,7 @@ export const AuthLoginForm = () => {
               </Text>
 
               <Text
-                size="lg"
+                size="md"
                 c={isDark ? "white" : "dark"}
                 style={{
                   textAlign: "center",

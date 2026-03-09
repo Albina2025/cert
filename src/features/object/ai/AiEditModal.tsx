@@ -22,6 +22,7 @@ import { api } from "../../../api/axios";
 
 import type { AiFormValues } from "../../../types/ai/ai.form.types";
 import type { CreateAiRequest } from "../../../types/ai/ai.request.types";
+import { FloatingSelect } from "../../../UI";
 
 interface Props {
   opened: boolean;
@@ -172,32 +173,95 @@ export const AiEditModal: React.FC<Props> = ({
                 </Title>
 
                 <Grid>
-                  {[
-                    "ministryId",
-                    "computePlatformTypeId",
-                    "hardwareName",
-                    "hardwarePurpose",
-                    "responsibleUnit",
-                    "hardwareSupplier",
-                    "purchaseDate",
-                    "purchaseAmount",
-                    "purchaseCurrencyId",
-                    "hardwareSpecs",
-                  ].map((field) => (
-                    <Grid.Col span={6} key={field}>
-                      <FloatingInput
-                        type={
-                          field === "purchaseDate"
-                            ? "date"
-                            : field === "purchaseAmount"
-                            ? "number"
-                            : "text"
-                        }
-                        labelText={t(`aiModal.fields.${field}`)}
-                        {...form.getInputProps(field)}
-                      />
-                    </Grid.Col>
-                  ))}
+                  <Grid.Col span={6}>
+                    <FloatingSelect
+                      required
+                      labelText={t("aiModal.fields.ministryId")}
+                      placeholder={`${t("aiModal.fields.ministryId")} *`}
+                      {...form.getInputProps("ministryId")}
+                    />
+                  </Grid.Col>
+
+                  <Grid.Col span={6}>
+                    <FloatingSelect
+                      required
+                      labelText={t("aiModal.fields.computePlatformTypeId")}
+                      placeholder={`${t("aiModal.fields.computePlatformTypeId")} *`}
+                      {...form.getInputProps("computePlatformTypeId")}
+                    />
+                  </Grid.Col>
+
+                  <Grid.Col span={6}>
+                    <FloatingInput
+                      type="text"
+                      labelText={t("aiModal.fields.hardwareName")}
+                      placeholder={`${t("aiModal.fields.hardwareName")} *`}
+                      {...form.getInputProps("hardwareName")}
+                    />
+                  </Grid.Col>
+
+                  <Grid.Col span={6}>
+                    <FloatingInput
+                      type="text"
+                      labelText={t("aiModal.fields.hardwarePurpose")}
+                      placeholder={`${t("aiModal.fields.hardwarePurpose")} *`}
+                      {...form.getInputProps("hardwarePurpose")}
+                    />
+                  </Grid.Col>
+
+                  <Grid.Col span={6}>
+                    <FloatingInput
+                      type="text"
+                      labelText={t("aiModal.fields.responsibleUnit")}
+                      placeholder={`${t("aiModal.fields.responsibleUnit")} *`}
+                      {...form.getInputProps("responsibleUnit")}
+                    />
+                  </Grid.Col>
+
+                  <Grid.Col span={6}>
+                    <FloatingInput
+                      type="text"
+                      labelText={t("aiModal.fields.hardwareSupplier")}
+                      placeholder={`${t("aiModal.fields.hardwareSupplier")} *`}
+                      {...form.getInputProps("hardwareSupplier")}
+                    />
+                  </Grid.Col>
+
+                  <Grid.Col span={6}>
+                    <FloatingInput
+                      type="date"
+                      labelText={t("aiModal.fields.purchaseDate")}
+                      placeholder={`${t("aiModal.fields.purchaseDate")} *`}
+                      {...form.getInputProps("purchaseDate")}
+                    />
+                  </Grid.Col>
+
+                  <Grid.Col span={6}>
+                    <FloatingInput
+                      type="number"
+                      labelText={t("aiModal.fields.purchaseAmount")}
+                      placeholder={`${t("aiModal.fields.purchaseAmount")} *`}
+                      {...form.getInputProps("purchaseAmount")}
+                    />
+                  </Grid.Col>
+
+                  <Grid.Col span={6}>
+                    <FloatingSelect
+                      required
+                      labelText={t("aiModal.fields.purchaseCurrencyId")}
+                      placeholder={`${t("aiModal.fields.purchaseCurrencyId")} *`}
+                      {...form.getInputProps("purchaseCurrencyId")}
+                    />
+                  </Grid.Col>
+
+                  <Grid.Col span={6}>
+                    <FloatingInput
+                      type="text"
+                      labelText={t("aiModal.fields.hardwareSpecs")}
+                      placeholder={`${t("aiModal.fields.hardwareSpecs")} *`}
+                      {...form.getInputProps("hardwareSpecs")}
+                    />
+                  </Grid.Col>
                 </Grid>
               </Box>
 

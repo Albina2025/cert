@@ -5,3 +5,4 @@ export interface SectorFormValues {
   logo?: string ;
   parentId?: number ;
 }
+

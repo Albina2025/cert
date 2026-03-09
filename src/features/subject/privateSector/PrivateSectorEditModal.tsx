@@ -15,6 +15,7 @@ import { useTranslation } from "react-i18next";
 import { BaseModal } from "../../../UI/modal/BaseModal";
 import { BaseButton } from "../../../UI/button/BaseButton";
 import { FloatingInput } from "../../../UI/input/FloatingInput";
+import { FloatingSelect } from "../../../UI/input/FloatingSelect";
 
 import {
   getSectorById,
@@ -72,12 +73,14 @@ export const PrivateSectorEditModal: React.FC<Props> = ({
     },
   });
 
+ 
   const { data } = useQuery<SectorItem>({
     queryKey: ["sector", sectorId],
     queryFn: () => getSectorById(sectorId!),
     enabled: !!sectorId,
   });
 
+  
   useEffect(() => {
     if (data) {
       form.setValues({
@@ -90,22 +93,19 @@ export const PrivateSectorEditModal: React.FC<Props> = ({
     }
   }, [data]);
 
-  const mapToRequest = (
-    values: SectorFormValues
-  ): CreateSectorRequest => {
+  const mapToRequest = (values: SectorFormValues): CreateSectorRequest => {
     return {
       titleRu: values.titleRu,
       titleKg: values.titleKg,
       address: values.address,
       logo: values.logo || "",
-      parentId: values.parentId ?? undefined,
+      parentId: values.parentId,
     };
   };
 
   const mutation = useMutation({
     mutationFn: async (data: CreateSectorRequest) => {
-      const response = await updateSector(sectorId!, data);
-      return response;
+      return updateSector(sectorId!, data);
     },
 
     onSuccess: () => {
@@ -115,7 +115,7 @@ export const PrivateSectorEditModal: React.FC<Props> = ({
         color: "green",
       });
 
-      queryClient.invalidateQueries({ queryKey: ["sector"] });
+      queryClient.invalidateQueries({ queryKey: ["privateSector"] });
       form.reset();
       onClose();
     },
@@ -129,9 +129,9 @@ export const PrivateSectorEditModal: React.FC<Props> = ({
     },
   });
 
-  const handleSubmit = (values: SectorFormValues) => {
+  const handleSubmit = form.onSubmit((values) => {
     mutation.mutate(mapToRequest(values));
-  };
+  });
 
   return (
     <BaseModal
@@ -155,11 +155,12 @@ export const PrivateSectorEditModal: React.FC<Props> = ({
 
           <Divider />
 
-          <form onSubmit={form.onSubmit(handleSubmit)}>
+          <form onSubmit={handleSubmit}>
             <Grid>
               <Grid.Col span={6}>
                 <FloatingInput
                   labelText={t("privateSectorModal.fields.titleRu")}
+                  required
                   {...form.getInputProps("titleRu")}
                 />
               </Grid.Col>
@@ -167,21 +168,40 @@ export const PrivateSectorEditModal: React.FC<Props> = ({
               <Grid.Col span={6}>
                 <FloatingInput
                   labelText={t("privateSectorModal.fields.titleKg")}
+                  required
                   {...form.getInputProps("titleKg")}
                 />
               </Grid.Col>
 
               <Grid.Col span={6}>
-                <FloatingInput
-                  type="number"
+                <FloatingSelect
                   labelText={t("privateSectorModal.fields.parent")}
-                  {...form.getInputProps("parentId")}
+                  searchable
+                  clearable
+                  data={
+                      data?.parent
+                        ? [
+                            {
+                              value: data.parent.id.toString(),  
+                              label: data.parent.titleRu,
+                            },
+                          ]
+                        : []
+                    }
+                    value={form.values.parentId?.toString() ?? ""} 
+                    onChange={(value) =>
+                      form.setFieldValue(
+                        "parentId",
+                        value ? Number(value) : undefined  
+                      )
+                  }
                 />
               </Grid.Col>
 
               <Grid.Col span={6}>
                 <FloatingInput
                   labelText={t("privateSectorModal.fields.address")}
+                  required
                   {...form.getInputProps("address")}
                 />
               </Grid.Col>
@@ -216,4 +236,4 @@ export const PrivateSectorEditModal: React.FC<Props> = ({
       </Stack>
     </BaseModal>
   );
-};
+}; 
