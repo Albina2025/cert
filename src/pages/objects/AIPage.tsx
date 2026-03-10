@@ -8,7 +8,9 @@ import type {  AiSearchResponse} from "../../types/ai/ai.response.types";
 import type { AiItem} from "../../types/ai/ai.item.types";
 import { Button, Flex, Menu, useMantineColorScheme } from "@mantine/core";
 import { IconChevronRight, IconMenu2 } from "@tabler/icons-react";
-import {AiAddModal, AiEditModal, AiFilterModal} from "../../features/object/ai/index";
+import {AiAddModal, AiEditModal} from "../../features/object/ai/index";
+import { aiFilterFields, aiFilterInitialValues, type AiFilter } from "../../filters/ai.filters";
+import { FilterModal } from "../../UI";
 
 export const AIPage: React.FC = () => {
   const { t } = useTranslation();
@@ -182,12 +184,24 @@ export const AIPage: React.FC = () => {
         
       />
 
-      <AiFilterModal
+      <FilterModal<AiFilter>
         opened={openedFilter}
         onClose={() => setOpenedFilter(false)}
+        title={t("aiFilter.title")}
+        initialValues={aiFilterInitialValues}
+        fields={aiFilterFields.map(f => ({
+          ...f,
+          label: t(`aiFilter.fields.${f.name}`),
+          placeholder: t(`aiFilter.placeholders.${f.name}`), 
+        }))}
         onApply={(values) => {
-          setFilter(values);
-          setPage(1); 
+          setFilter({
+            ministryId: values.ministryId ? Number(values.ministryId) : null,
+            computePlatformTypeId: values.computePlatformTypeId
+              ? Number(values.computePlatformTypeId)
+              : null,
+          });
+          setPage(1);
         }}
       />
     </>

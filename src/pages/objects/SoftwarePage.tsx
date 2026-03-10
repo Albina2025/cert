@@ -9,17 +9,16 @@ import { getSoftwareList } from "../../services/software.service";
 import type {SoftwareSearchRequest } from "../../types/software/software.request.types";
 import type { SoftwareSearchResponse } from "../../types/software/software.response.types";
 import type { SoftwareItem } from "../../types/software/software.response.types";
-import {SoftwareAddModal, SoftwareEditModal, SoftwareFilterModal} from "../../features/object/software/index"
+import {SoftwareAddModal, SoftwareEditModal} from "../../features/object/software/index"
+import { FilterModal } from "../../UI/filter/FilterModal";
+import {softwareFilterFields, softwareFilterInitialValues, type SoftwareFilter} from "../../filters/software.filters";
 
 export const SoftwarePage: React.FC = () => {
   const { t } = useTranslation();
-
   const [openedAdd, setOpenedAdd] = useState(false);
   const [openedEdit, setOpenedEdit] = useState(false);
   const [openedFilter, setOpenedFilter] = useState(false);
-
   const [editId, setEditId] = useState<number | null>(null);
-
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
@@ -48,6 +47,7 @@ export const SoftwarePage: React.FC = () => {
     return response.data;
   },
 });
+
 
  const columns: Column<SoftwareItem>[] = [
   { key: "id", label: "ID" },
@@ -148,12 +148,19 @@ export const SoftwarePage: React.FC = () => {
         }}
         softwareId={editId}
       />
-
-      <SoftwareFilterModal
+      <FilterModal<SoftwareFilter>
         opened={openedFilter}
         onClose={() => setOpenedFilter(false)}
+        title={t("softwareFilter.title")}
+        initialValues={softwareFilterInitialValues}
+        fields={softwareFilterFields.map((f) => ({ ...f, label: t("softwareFilter.fields.subject") }))}
         onApply={(values) => {
-          setFilter(values);
+          setFilter({
+            ministryId: values.ministryId
+              ? Number(values.ministryId)
+              : null,
+          });
+
           setPage(1);
         }}
       />
