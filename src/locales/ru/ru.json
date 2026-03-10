@@ -69,16 +69,16 @@
             "subject": "Субъект",
             "name": "Название ПО",
             "purpose": "Назначение ПО",
-            "manufacturer": "Производитель",
+            "manufacturer": "Производитель ПО",
             "supplier": "Поставщик",
             "purchaseDate": "Дата приобретения",
             "purchaseAmount": "Сумма приобретения",
             "purchaseCurrency": "Валюта покупки",
-            "softwareVersion": "Версия",
-            "lastUpdateDate": "Дата последнего обновления",
+            "softwareVersion": "Версия ПО",
+            "lastUpdateDate": "Дата последнего обновления ПО",
             "licenseExpiryDate": "Дата окончания лицензии",
-            "licenseType": "Тип лицензии",
-            "licenseCount": "Количество лицензий"
+            "licenseType": "Тип лицензии ПО",
+            "licenseCount": "Количество лицензий ПО"
         },
 
         "licenseOptions": {

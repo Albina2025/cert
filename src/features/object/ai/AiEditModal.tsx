@@ -1,23 +1,13 @@
 import { useEffect } from "react";
-import {
-  Stack,
-  Group,
-  Switch,
-  Grid,
-  Box,
-  Title,
-  Divider,
-} from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { notifications } from "@mantine/notifications";
-import { IconCheck, IconX } from "@tabler/icons-react";
+import { BaseModal } from "../../../UI/index";
 import { useTranslation } from "react-i18next";
-import {FloatingInput, FloatingSelect, BaseButton, BaseModal} from "../../../UI/index"
+import { useForm } from "@mantine/form";
+import { AiForm } from "./index";
 import { api } from "../../../api/axios";
 import type { AiFormValues } from "../../../types/ai/ai.form.types";
 import type { CreateAiRequest } from "../../../types/ai/ai.request.types";
-
 
 interface Props {
   opened: boolean;
@@ -25,14 +15,9 @@ interface Props {
   aiId: number | null;
 }
 
-export const AiEditModal: React.FC<Props> = ({
-  opened,
-  onClose,
-  aiId,
-}) => {
+export const AiEditModal: React.FC<Props> = ({ opened, onClose, aiId }) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-
 
   const form = useForm<AiFormValues>({
     initialValues: {
@@ -54,6 +39,7 @@ export const AiEditModal: React.FC<Props> = ({
     },
   });
 
+  // AI маалыматтарын алуу
   const { data } = useQuery({
     queryKey: ["ai", aiId],
     queryFn: async () => {
@@ -63,22 +49,19 @@ export const AiEditModal: React.FC<Props> = ({
     enabled: !!aiId,
   });
 
+  // Formду data келгенде жаңыртуу
   useEffect(() => {
     if (data) {
       form.setValues({
         ministryId: String(data.ministryDto?.id ?? ""),
-        computePlatformTypeId: String(
-          data.computePlatformType?.id ?? ""
-        ),
+        computePlatformTypeId: String(data.computePlatformType?.id ?? ""),
         hardwareName: data.hardwareName ?? "",
         hardwarePurpose: data.hardwarePurpose ?? "",
         responsibleUnit: data.responsibleUnit ?? "",
         hardwareSupplier: data.hardwareSupplier ?? "",
         purchaseDate: data.purchaseDate ?? "",
         purchaseAmount: String(data.purchaseAmount ?? ""),
-        purchaseCurrencyId: String(
-          data.purchaseCurrency?.id ?? ""
-        ),
+        purchaseCurrencyId: String(data.purchaseCurrency?.id ?? ""),
         hardwareSpecs: data.hardwareSpecs ?? "",
         modelName: data.modelName ?? "",
         modelPurpose: data.modelPurpose ?? "",
@@ -89,30 +72,7 @@ export const AiEditModal: React.FC<Props> = ({
     }
   }, [data]);
 
-
-  const mapToRequest = (
-    values: AiFormValues
-  ): CreateAiRequest => {
-    return {
-      ministryId: Number(values.ministryId),
-      computePlatformTypeId: Number(values.computePlatformTypeId),
-      hardwareName: values.hardwareName,
-      hardwarePurpose: values.hardwarePurpose,
-      responsibleUnit: values.responsibleUnit,
-      hardwareSupplier: values.hardwareSupplier,
-      purchaseDate: values.purchaseDate,
-      purchaseAmount: values.purchaseAmount,
-      purchaseCurrencyId: Number(values.purchaseCurrencyId),
-      hardwareSpecs: values.hardwareSpecs,
-      modelName: values.modelName,
-      modelPurpose: values.modelPurpose,
-      modelDeveloper: values.modelDeveloper,
-      usesApi: values.usesApi,
-      apiProvider: values.usesApi ? values.apiProvider : "",
-    };
-  };
-
-
+  // Update mutation
   const mutation = useMutation({
     mutationFn: async (values: CreateAiRequest) => {
       const res = await api.put(`/api/v1/ai/${aiId}`, values);
@@ -124,7 +84,6 @@ export const AiEditModal: React.FC<Props> = ({
         message: t("notifications.updated"),
         color: "green",
       });
-
       queryClient.invalidateQueries({ queryKey: ["ai"] });
       onClose();
     },
@@ -137,201 +96,20 @@ export const AiEditModal: React.FC<Props> = ({
     },
   });
 
+  // Submit handler
   const handleSubmit = (values: AiFormValues) => {
-    mutation.mutate(mapToRequest(values));
+    mutation.mutate({
+      ...values,
+      ministryId: Number(values.ministryId),
+      computePlatformTypeId: Number(values.computePlatformTypeId),
+      purchaseCurrencyId: Number(values.purchaseCurrencyId),
+      apiProvider: values.usesApi ? values.apiProvider : "",
+    } as CreateAiRequest);
   };
 
   return (
-    <BaseModal
-      opened={opened}
-      onClose={onClose}
-      size={1200}
-      radius={15}
-      centered
-      withCloseButton={false}
-    >
-      <Box p="md">
-        <Stack gap="lg">
-          <Title order={3} ta="center">
-            {t("aiModal.editTitle")}
-          </Title>
-
-          <Divider />
-
-          <form onSubmit={form.onSubmit(handleSubmit)}>
-            <Stack gap="xl">
-
-        
-              <Box p="md" style={{ border: "1px solid #303d43", borderRadius: 8 }}>
-                <Title order={5} ta="center" mb="md">
-                  {t("aiModal.hardware")}
-                </Title>
-
-                <Grid>
-                  <Grid.Col span={6}>
-                    <FloatingSelect
-                      required
-                      labelText={t("aiModal.fields.ministryId")}
-                      placeholder={`${t("aiModal.fields.ministryId")} *`}
-                      {...form.getInputProps("ministryId")}
-                    />
-                  </Grid.Col>
-
-                  <Grid.Col span={6}>
-                    <FloatingSelect
-                      required
-                      labelText={t("aiModal.fields.computePlatformTypeId")}
-                      placeholder={`${t("aiModal.fields.computePlatformTypeId")} *`}
-                      {...form.getInputProps("computePlatformTypeId")}
-                    />
-                  </Grid.Col>
-
-                  <Grid.Col span={6}>
-                    <FloatingInput
-                      type="text"
-                      labelText={t("aiModal.fields.hardwareName")}
-                      placeholder={`${t("aiModal.fields.hardwareName")} *`}
-                      {...form.getInputProps("hardwareName")}
-                    />
-                  </Grid.Col>
-
-                  <Grid.Col span={6}>
-                    <FloatingInput
-                      type="text"
-                      labelText={t("aiModal.fields.hardwarePurpose")}
-                      placeholder={`${t("aiModal.fields.hardwarePurpose")} *`}
-                      {...form.getInputProps("hardwarePurpose")}
-                    />
-                  </Grid.Col>
-
-                  <Grid.Col span={6}>
-                    <FloatingInput
-                      type="text"
-                      labelText={t("aiModal.fields.responsibleUnit")}
-                      placeholder={`${t("aiModal.fields.responsibleUnit")} *`}
-                      {...form.getInputProps("responsibleUnit")}
-                    />
-                  </Grid.Col>
-
-                  <Grid.Col span={6}>
-                    <FloatingInput
-                      type="text"
-                      labelText={t("aiModal.fields.hardwareSupplier")}
-                      placeholder={`${t("aiModal.fields.hardwareSupplier")} *`}
-                      {...form.getInputProps("hardwareSupplier")}
-                    />
-                  </Grid.Col>
-
-                  <Grid.Col span={6}>
-                    <FloatingInput
-                      type="date"
-                      labelText={t("aiModal.fields.purchaseDate")}
-                      placeholder={`${t("aiModal.fields.purchaseDate")} *`}
-                      {...form.getInputProps("purchaseDate")}
-                    />
-                  </Grid.Col>
-
-                  <Grid.Col span={6}>
-                    <FloatingInput
-                      type="number"
-                      labelText={t("aiModal.fields.purchaseAmount")}
-                      placeholder={`${t("aiModal.fields.purchaseAmount")} *`}
-                      {...form.getInputProps("purchaseAmount")}
-                    />
-                  </Grid.Col>
-
-                  <Grid.Col span={6}>
-                    <FloatingSelect
-                      required
-                      labelText={t("aiModal.fields.purchaseCurrencyId")}
-                      placeholder={`${t("aiModal.fields.purchaseCurrencyId")} *`}
-                      {...form.getInputProps("purchaseCurrencyId")}
-                    />
-                  </Grid.Col>
-
-                  <Grid.Col span={6}>
-                    <FloatingInput
-                      type="text"
-                      labelText={t("aiModal.fields.hardwareSpecs")}
-                      placeholder={`${t("aiModal.fields.hardwareSpecs")} *`}
-                      {...form.getInputProps("hardwareSpecs")}
-                    />
-                  </Grid.Col>
-                </Grid>
-              </Box>
-
-       
-              <Box p="md" style={{ border: "1px solid #303d43", borderRadius: 8 }}>
-                <Title order={5} ta="center" mb="md">
-                  {t("aiModal.model")}
-                </Title>
-
-                <Grid>
-                  {["modelName", "modelPurpose", "modelDeveloper"].map(
-                    (field) => (
-                      <Grid.Col
-                        span={field === "modelDeveloper" ? 12 : 6}
-                        key={field}
-                      >
-                        <FloatingInput
-                          labelText={t(`aiModal.fields.${field}`)}
-                          {...form.getInputProps(field)}
-                        />
-                      </Grid.Col>
-                    )
-                  )}
-                </Grid>
-              </Box>
-
-       
-              <Box p="md" style={{ border: "1px solid #303d43", borderRadius: 8 }}>
-                <Title order={5} ta="center" mb="md">
-                  API
-                </Title>
-
-                <Switch
-                  label={t("aiModal.fields.usesApi")}
-                  {...form.getInputProps("usesApi", { type: "checkbox" })}
-                  thumbIcon={
-                    form.values.usesApi ? (
-                      <IconCheck size={12} />
-                    ) : (
-                      <IconX size={12} />
-                    )
-                  }
-                />
-
-                {form.values.usesApi && (
-                  <FloatingInput
-                    labelText={t("aiModal.fields.apiProvider")}
-                    {...form.getInputProps("apiProvider")}
-                  />
-                )}
-              </Box>
-
-    
-              <Group justify="center">
-                <BaseButton
-                  variantType="secondary"
-                  type="button"
-                  onClick={onClose}
-                >
-                  {t("aiModal.buttons.cancel")}
-                </BaseButton>
-
-                <BaseButton
-                  variantType="primary"
-                  type="submit"
-                  loading={mutation.isPending}
-                >
-                  {t("aiModal.buttons.save")}
-                </BaseButton>
-              </Group>
-
-            </Stack>
-          </form>
-        </Stack>
-      </Box>
+    <BaseModal opened={opened} onClose={onClose} size={1200} centered withCloseButton={false}>
+      <AiForm form={form} onSubmit={handleSubmit} loading={mutation.isPending} onCancel={onClose} />
     </BaseModal>
   );
 };

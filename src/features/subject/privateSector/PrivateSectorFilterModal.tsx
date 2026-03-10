@@ -59,110 +59,110 @@ const handleReset = () => {
 
   return (
     <BaseModal
-  opened={opened}
-  onClose={onClose}
-  centered
-  size={800}
-  withCloseButton={false}
-  radius={15}
->
-  <Grid>
-    <Grid.Col span={12}>
-      <Divider
-        size="sm"
-        my="xs"
-        label={t("privateSectorFilter.title")}
-      />
-    </Grid.Col>
+      opened={opened}
+      onClose={onClose}
+      centered
+      size={800}
+      withCloseButton={false}
+      radius={15}
+    >
+      <Grid>
+        <Grid.Col span={12}>
+          <Divider
+            size="sm"
+            my="xs"
+            label={t("privateSectorFilter.title")}
+          />
+        </Grid.Col>
 
-    <Grid.Col span={12}>
-      <FloatingInput
-        labelText={t("privateSectorFilter.fields.title")}
-        {...form.getInputProps("title")}
-      />
-    </Grid.Col>
+        <Grid.Col span={12}>
+          <FloatingInput
+            labelText={t("privateSectorFilter.fields.title")}
+            {...form.getInputProps("title")}
+          />
+        </Grid.Col>
 
-    <Grid.Col span={12}>
-      <FloatingInput
-        labelText={t("privateSectorFilter.fields.address")}
-        {...form.getInputProps("address")}
-      />
-    </Grid.Col>
-
-
-    <Grid.Col span={12}>
-      <Switch
-        label={t("privateSectorFilter.fields.enabled")}
-        checked={form.values.enabled ?? false}
-        onChange={(e) =>
-          form.setFieldValue(
-            "enabled",
-            e.currentTarget.checked
-          )
-        }
-        color={form.values.enabled ? "green" : "red"}
-         thumbIcon={
-          form.values.enabled ? (
-            <IconCheck size={12} />
-          ) : (
-            <IconX size={12} />
-          )
-        }
-      />
-    </Grid.Col>
+        <Grid.Col span={12}>
+          <FloatingInput
+            labelText={t("privateSectorFilter.fields.address")}
+            {...form.getInputProps("address")}
+          />
+        </Grid.Col>
 
 
-    <Grid.Col span={12}>
-      <FloatingInput
-        type="number"
-        labelText={t("privateSectorFilter.fields.exclude")}
-        {...form.getInputProps("exclude")}
-      />
-    </Grid.Col>
-
-   
-    <Grid.Col span={12}>
-      <Switch
-        label={t("privateSectorFilter.fields.auditedMinistries")}
-        checked={form.values.auditedMinistries ?? false}
-        onChange={(e) =>
-          form.setFieldValue(
-            "auditedMinistries",
-            e.currentTarget.checked
-          )
-        }
-        color={form.values.auditedMinistries ? "green" : "red"}
-        thumbIcon={
-          form.values.auditedMinistries ? (
-            <IconCheck size={12} />
-          ) : (
-            <IconX size={12} />
-          )
-        }
-      />
-    </Grid.Col>
+        <Grid.Col span={12}>
+          <Switch
+            label={t("privateSectorFilter.fields.enabled")}
+            checked={form.values.enabled ?? false}
+            onChange={(e) =>
+              form.setFieldValue(
+                "enabled",
+                e.currentTarget.checked
+              )
+            }
+            color={form.values.enabled ? "green" : "red"}
+            thumbIcon={
+              form.values.enabled ? (
+                <IconCheck size={12} />
+              ) : (
+                <IconX size={12} />
+              )
+            }
+          />
+        </Grid.Col>
 
 
-    <Grid.Col span={6}>
-      <BaseButton
-        onClick={handleReset}
-        fullWidth
-        variantType="secondary"
-      >
-        {t("privateSectorFilter.buttons.reset")}
-      </BaseButton>
-    </Grid.Col>
+        <Grid.Col span={12}>
+          <FloatingInput
+            type="number"
+            labelText={t("privateSectorFilter.fields.exclude")}
+            {...form.getInputProps("exclude")}
+          />
+        </Grid.Col>
 
-    <Grid.Col span={6}>
-      <BaseButton
-        onClick={handleApply}
-        fullWidth
-        variantType="primary"
-      >
-        {t("privateSectorFilter.buttons.apply")}
-      </BaseButton>
-    </Grid.Col>
-  </Grid>
-</BaseModal>
+      
+        <Grid.Col span={12}>
+          <Switch
+            label={t("privateSectorFilter.fields.auditedMinistries")}
+            checked={form.values.auditedMinistries ?? false}
+            onChange={(e) =>
+              form.setFieldValue(
+                "auditedMinistries",
+                e.currentTarget.checked
+              )
+            }
+            color={form.values.auditedMinistries ? "green" : "red"}
+            thumbIcon={
+              form.values.auditedMinistries ? (
+                <IconCheck size={12} />
+              ) : (
+                <IconX size={12} />
+              )
+            }
+          />
+        </Grid.Col>
+
+
+        <Grid.Col span={6}>
+          <BaseButton
+            onClick={handleReset}
+            fullWidth
+            variantType="secondary"
+          >
+            {t("privateSectorFilter.buttons.reset")}
+          </BaseButton>
+        </Grid.Col>
+
+        <Grid.Col span={6}>
+          <BaseButton
+            onClick={handleApply}
+            fullWidth
+            variantType="primary"
+          >
+            {t("privateSectorFilter.buttons.apply")}
+          </BaseButton>
+        </Grid.Col>
+      </Grid>
+    </BaseModal>
   );
 };
