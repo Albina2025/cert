@@ -1,17 +1,14 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { TableData } from "../../layout/tableData/TableData";
-import { AiAddModal } from "../../features/object/ai/AiAddModal";
-import { AiFilterModal } from "../../features/object/ai/AiFilterModal";
+import { TableData, type Column  } from "../../layout/tableData/TableData";
 import { api } from "../../api/axios";
 import type {AiSearchRequest} from "../../types/ai/ai.request.types";
 import type {  AiSearchResponse} from "../../types/ai/ai.response.types";
 import type { AiItem} from "../../types/ai/ai.item.types";
-import type { Column } from "../../layout/tableData/TableData";
-import { AiEditModal } from "../../features/object/ai/AiEditModal";
 import { Button, Flex, Menu, useMantineColorScheme } from "@mantine/core";
 import { IconChevronRight, IconMenu2 } from "@tabler/icons-react";
+import {AiAddModal, AiEditModal, AiFilterModal} from "../../features/object/ai/index";
 
 export const AIPage: React.FC = () => {
   const { t } = useTranslation();

@@ -11,11 +11,7 @@ import { useForm } from "@mantine/form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { notifications } from "@mantine/notifications";
 import { useTranslation } from "react-i18next";
-
-import { BaseModal } from "../../../UI/modal/BaseModal";
-import { BaseButton } from "../../../UI/button/BaseButton";
-import { FloatingInput } from "../../../UI/input/FloatingInput";
-import { FloatingSelect } from "../../../UI/input/FloatingSelect";
+import {BaseModal, BaseButton, FloatingInput, FloatingSelect} from "../../../UI/index"
 
 import {
   getSectorById,

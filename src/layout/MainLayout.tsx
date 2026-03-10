@@ -1,6 +1,5 @@
 import { AppShell } from '@mantine/core';
-import { Header } from './Header';
-import { Sidebar } from './Sidebar';
+import {Header, Sidebar} from './index'
 import { Outlet } from 'react-router-dom';
 import { useMantineColorScheme } from '@mantine/core';
 

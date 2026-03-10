@@ -1,14 +1,11 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { TableData } from "../../layout/tableData/TableData";
-import { PrivateSectorAddModal } from "../../features/subject/privateSector/PrivateSectorAddModal";
-import { PrivateSectorFilterModal } from "../../features/subject/privateSector/PrivateSectorFilterModal";
+import { TableData, type Column  } from "../../layout/tableData/TableData";
+import {PrivateSectorAddModal, PrivateSectorFilterModal, PrivateSectorEditModal} from "../../features/subject/privateSector/index"
 import { api } from "../../api/axios";
 import type {SectorSearchRequest} from "../../types/sector/sector.request.types";
 import type {SectorItem, SectorSearchResponse} from "../../types/sector/sector.response.types";
-import type { Column } from "../../layout/tableData/TableData";
-import { PrivateSectorEditModal } from "../../features/subject/privateSector/PrivateSectorEditModal";
 import { Button, Flex, Menu, useMantineColorScheme } from "@mantine/core";
 import { IconChevronRight, IconMenu2, IconCheck, IconX } from "@tabler/icons-react";
 import { changeSectorStatus } from "../../services/sector.service";

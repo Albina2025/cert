@@ -11,15 +11,13 @@ import { useForm } from "@mantine/form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
-import { BaseModal } from "../../../UI/modal/BaseModal";
-import { BaseButton } from "../../../UI/button/BaseButton";
-import { FloatingInput } from "../../../UI/input/FloatingInput";
+import {BaseModal, BaseButton, FloatingInput, FloatingSelect} from "../../../UI/index"
 import { useTranslation } from "react-i18next";
 
 import type { AiFormValues } from "../../../types/ai/ai.form.types";
 import type { CreateAiRequest } from "../../../types/ai/ai.request.types";
 import { createAi } from "../../../services/ai.service";
-import { FloatingSelect } from "../../../UI";
+
 
 interface AiAddModalProps {
   opened: boolean;

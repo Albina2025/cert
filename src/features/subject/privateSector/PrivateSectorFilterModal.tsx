@@ -1,9 +1,7 @@
 import { Grid, Divider, Switch } from "@mantine/core";
 import { IconCheck, IconX } from '@tabler/icons-react'
 import { useForm } from "@mantine/form";
-import { BaseModal } from "../../../UI/modal/BaseModal";
-import { BaseButton } from "../../../UI/button/BaseButton";
-import { FloatingInput } from "../../../UI/input/FloatingInput";
+import {BaseModal, BaseButton, FloatingInput} from "../../../UI/index"
 import { useTranslation } from "react-i18next";
 import type {SectorFilterForm, SectorSearchRequest} from "../../../types/sector/sector.request.types"
 

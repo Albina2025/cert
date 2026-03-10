@@ -1,10 +1,7 @@
 import { Grid, Divider } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { FloatingSelect } from "../../../UI/input/FloatingSelect";
-import { BaseModal } from "../../../UI/modal/BaseModal";
-import { BaseButton } from "../../../UI/button/BaseButton";
+import {FloatingSelect, BaseModal, BaseButton} from "../../../UI/index"
 import { useTranslation } from "react-i18next";
-
 import type { SoftwareSearchRequest } from "../../../types/software/software.request.types";
 
 type Props = {

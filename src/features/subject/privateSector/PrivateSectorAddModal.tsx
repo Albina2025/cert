@@ -2,12 +2,8 @@ import { useEffect, useState } from "react";
 import { Stack, Group, Box, Grid, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
-import { BaseModal } from "../../../UI/modal/BaseModal";
-import { BaseButton } from "../../../UI/button/BaseButton";
-import { FloatingInput } from "../../../UI/input/FloatingInput";
-import { FloatingSelect } from "../../../UI/input/FloatingSelect";
+import {BaseModal, BaseButton, FloatingInput, FloatingSelect} from "../../../UI/index"
 import { useTranslation } from "react-i18next";
-
 import { api } from "../../../api/axios";
 import type { SectorFormValues } from "../../../types/sector/sector.form.types";
 import type { CreateSectorRequest } from "../../../types/sector/sector.request.types";

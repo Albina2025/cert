@@ -13,16 +13,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import { useTranslation } from "react-i18next";
-
-import { BaseModal } from "../../../UI/modal/BaseModal";
-import { BaseButton } from "../../../UI/button/BaseButton";
-import { FloatingInput } from "../../../UI/input/FloatingInput";
-
+import {FloatingInput, FloatingSelect, BaseButton, BaseModal} from "../../../UI/index"
 import { api } from "../../../api/axios";
-
 import type { AiFormValues } from "../../../types/ai/ai.form.types";
 import type { CreateAiRequest } from "../../../types/ai/ai.request.types";
-import { FloatingSelect } from "../../../UI";
+
 
 interface Props {
   opened: boolean;

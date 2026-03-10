@@ -1,9 +1,8 @@
-import { Grid, Select } from "@mantine/core";
+import { Grid } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { BaseModal } from "../../../UI/modal/BaseModal";
-import { BaseButton } from "../../../UI/button/BaseButton";
 import { useTranslation } from "react-i18next";
 import type { AiSearchRequest } from "../../../types/ai/ai.request.types";
+import {BaseModal, BaseButton, FloatingSelect} from  "../../../UI/index"
 
 type Props = {
   opened: boolean;
@@ -64,8 +63,8 @@ export const AiFilterModal = ({
       <Grid gutter="md">
 
         <Grid.Col span={12}>
-          <Select
-            label={t("aiFilter.fields.subject")}
+          <FloatingSelect
+            labelText={t("aiFilter.fields.subject")}
             placeholder={t("aiFilter.placeholders.subject")}
             data={[
               { value: "1", label: "Минфин" },
@@ -82,8 +81,8 @@ export const AiFilterModal = ({
         </Grid.Col>
 
         <Grid.Col span={12}>
-          <Select
-            label={t("aiFilter.fields.platformType")}
+          <FloatingSelect
+            labelText={t("aiFilter.fields.platformType")}
             placeholder={t("aiFilter.placeholders.platformType")}
             data={[
               { value: "1", label: "Server" },

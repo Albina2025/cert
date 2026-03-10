@@ -5,13 +5,11 @@ import { Menu, Button, Flex } from "@mantine/core";
 import { useMantineColorScheme } from "@mantine/core";
 import {  IconChevronRight, IconMenu2 } from "@tabler/icons-react";
 import { TableData, type Column } from "../../layout/tableData/TableData";
-import { SoftwareAddModal } from "../../features/object/software/SoftwareAddModal";
-import { SoftwareEditModal } from "../../features/object/software/SoftwareEditeModal";
-import { SoftwareFilterModal } from "../../features/object/software/SoftwareFilterModal";
 import { getSoftwareList } from "../../services/software.service";
 import type {SoftwareSearchRequest } from "../../types/software/software.request.types";
 import type { SoftwareSearchResponse } from "../../types/software/software.response.types";
 import type { SoftwareItem } from "../../types/software/software.response.types";
+import {SoftwareAddModal, SoftwareEditModal, SoftwareFilterModal} from "../../features/object/software/index"
 
 export const SoftwarePage: React.FC = () => {
   const { t } = useTranslation();
