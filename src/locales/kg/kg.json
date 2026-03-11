@@ -152,8 +152,8 @@
     "aiFilter": {
         "title": "Фильтр",
         "fields": {
-            "subject": "Субъектти тандаңыз",
-            "platformType": "Эсептөө платформасынын түрү"
+            "ministryId": "Министрлик",
+            "computePlatformTypeId": "Эсептөө платформасынын түрү"
         },
         "placeholders": {
             "subject": "Субъектти тандаңыз",
@@ -188,6 +188,44 @@
             "cancel":"Жокко чыгаруу",
             "confirm":"Тастыктоо"
         }
-    }
+    },
+
+    "criteriaFilter": {
+        "title": "Критерийлер боюнча фильтр",
+
+        "fields": {
+            "id": "ID",
+            "titleRu": "Орусча аталышы",
+            "titleKg": "Кыргызча аталышы",
+            "controlId": "Контролдор тобу"
+        }
+    },
     
+    "controlGroupsModal": {
+    "title": "Контролдор тобун кошуу",
+    "editTitle": "Контролдор тобун өзгөртүү",
+
+    "fields": {
+        "titleRu": "Орусча аталышы",
+        "titleKg": "Кыргызча аталышы",
+        "identifier": "Идентификатор",
+        "parent": "Жогорку топ"
+    },
+
+    "buttons": {
+        "cancel": "Жокко чыгаруу",
+        "confirm": "Тастыктоо"
+    }
+    },
+    "controlGroupsFilter": {
+        "title": "Контролдорду фильтрлөө",
+
+        "fields": {
+            "id": "ID",
+            "titleRu": "Орусча аталышы",
+            "titleKg": "Кыргызча аталышы",
+            "parentId": "Жогорку топ"
+        }
+    }
+
 }
