@@ -6,6 +6,7 @@ import { api } from "../../../api/axios";
 import { useTranslation } from "react-i18next";
 
 import type { CriteriaFormValues } from "../../../types/criteria/criteria.form.types";
+import { useRef } from "react";
 
 interface Props {
   opened: boolean;
@@ -16,6 +17,7 @@ export const CriteriaAddModal: React.FC<Props> = ({ opened, onClose }) => {
   const { t } = useTranslation();
   const { colorScheme } = useMantineColorScheme();
   const isDark = colorScheme === "dark";
+  const formRef = useRef<HTMLFormElement>(null)
 
   const handleSubmit = async (values: CriteriaFormValues) => {
     try {
@@ -57,7 +59,7 @@ export const CriteriaAddModal: React.FC<Props> = ({ opened, onClose }) => {
             {t("criteriaModal.title")}
           </Title>
 
-          <CriteriaForm onSubmit={handleSubmit} />
+          <CriteriaForm ref={formRef}  onSubmit={handleSubmit} />
 
           <Group justify="center" mt="md">
             <BaseButton variantType="secondary" onClick={onClose}>
@@ -66,13 +68,7 @@ export const CriteriaAddModal: React.FC<Props> = ({ opened, onClose }) => {
 
             <BaseButton
               variantType="primary"
-              onClick={() =>
-                document
-                  .querySelector("form")
-                  ?.dispatchEvent(
-                    new Event("submit", { cancelable: true, bubbles: true })
-                  )
-              }
+              onClick={() => formRef.current?.requestSubmit()}
             >
               {t("criteriaModal.buttons.confirm")}
             </BaseButton>

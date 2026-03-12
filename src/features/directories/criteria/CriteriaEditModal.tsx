@@ -17,6 +17,7 @@ import {
 } from "../../../services/criteria.service";
 import type { CriteriaItem } from "../../../types/criteria/criteria.item.types";
 import type { CriteriaFormValues } from "../../../types/criteria/criteria.form.types";
+import { useRef } from "react";
 
 interface Props {
   opened: boolean;
@@ -34,6 +35,7 @@ export const CriteriaEditModal: React.FC<Props> = ({
 
   const { colorScheme } = useMantineColorScheme();
   const isDark = colorScheme === "dark";
+  const formRef = useRef<HTMLFormElement>(null)
 
   const { data } = useQuery<CriteriaItem>({
     queryKey: ["criteria", criteriaId],
@@ -97,6 +99,7 @@ export const CriteriaEditModal: React.FC<Props> = ({
 
           {data && (
             <CriteriaForm
+              ref={formRef}
               defaultValues={{
                 titleRu: data.titleRu,
                 titleKg: data.titleKg,
@@ -114,13 +117,7 @@ export const CriteriaEditModal: React.FC<Props> = ({
             <BaseButton
               variantType="primary"
               loading={mutation.isPending}
-              onClick={() =>
-                document
-                  .querySelector("form")
-                  ?.dispatchEvent(
-                    new Event("submit", { cancelable: true, bubbles: true })
-                  )
-              }
+              onClick={() => formRef.current?.requestSubmit()}
             >
               {t("criteriaModal.buttons.confirm")}
             </BaseButton>

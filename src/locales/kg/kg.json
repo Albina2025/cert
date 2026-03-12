@@ -201,21 +201,21 @@
         }
     },
     
-    "controlGroupsModal": {
-    "title": "Контролдор тобун кошуу",
-    "editTitle": "Контролдор тобун өзгөртүү",
+    "controlGroups": {
+        "title": "Контролдор тобун кошуу",
+        "editTitle": "Контролдор тобун өзгөртүү",
 
-    "fields": {
-        "titleRu": "Орусча аталышы",
-        "titleKg": "Кыргызча аталышы",
-        "identifier": "Идентификатор",
-        "parent": "Жогорку топ"
-    },
+        "fields": {
+            "titleRu": "Орусча аталышы",
+            "titleKg": "Кыргызча аталышы",
+            "identifier": "Идентификатор",
+            "parent": "Жогорку топ"
+        },
 
-    "buttons": {
-        "cancel": "Жокко чыгаруу",
-        "confirm": "Тастыктоо"
-    }
+        "buttons": {
+            "cancel": "Жокко чыгаруу",
+            "confirm": "Тастыктоо"
+        }
     },
     "controlGroupsFilter": {
         "title": "Контролдорду фильтрлөө",

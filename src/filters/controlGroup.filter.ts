@@ -14,7 +14,7 @@ export const controlGroupsFilterInitialValues: ControlGroupsFilter = {
   parentId: undefined,
 }
 
-export const controlGroupsFilterFields: FilterField<ControlGroupsFilter>[] = [
+export const controlGroupsFilter: FilterField<ControlGroupsFilter>[] = [
   {
     type: "number",
     name: "id",

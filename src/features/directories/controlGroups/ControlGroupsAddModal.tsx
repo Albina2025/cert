@@ -6,6 +6,7 @@ import { createControlGroup } from "../../../services/controlGroups.service"
 import { useTranslation } from "react-i18next"
 
 import type { ControlGroupsFormValues } from "../../../types/control/controlGroups.form.types"
+import { useRef } from "react"
 
 interface Props {
   opened: boolean
@@ -19,6 +20,7 @@ export const ControlGroupsAddModal: React.FC<Props> = ({
   const { t } = useTranslation()
   const { colorScheme } = useMantineColorScheme()
   const isDark = colorScheme === "dark"
+  const formRef = useRef<HTMLFormElement>(null)
 
   const handleSubmit = async (values: ControlGroupsFormValues) => {
     try {
@@ -55,7 +57,7 @@ export const ControlGroupsAddModal: React.FC<Props> = ({
             {t("controlGroups.modal.title")}
           </Title>
 
-          <ControlGroupsForm onSubmit={handleSubmit} />
+          <ControlGroupsForm ref={formRef}  onSubmit={handleSubmit} />
 
           <Group justify="center" mt="md">
             <BaseButton variantType="secondary" onClick={onClose}>
@@ -64,13 +66,7 @@ export const ControlGroupsAddModal: React.FC<Props> = ({
 
             <BaseButton
               variantType="primary"
-              onClick={() =>
-                document
-                  .querySelector("form")
-                  ?.dispatchEvent(
-                    new Event("submit", { cancelable: true, bubbles: true })
-                  )
-              }
+               onClick={() => formRef.current?.requestSubmit()}
             >
               {t("controlGroups.buttons.confirm")}
             </BaseButton>

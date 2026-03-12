@@ -4,13 +4,13 @@ import { useTranslation } from "react-i18next";
 import { Menu, Button, Flex, useMantineColorScheme } from "@mantine/core";
 import {  IconChevronRight, IconMenu2 } from "@tabler/icons-react";
 import { TableData, type Column } from "../../layout/tableData/TableData";
-import { getSoftwareList } from "../../services/software.service";
 import type {SoftwareSearchRequest } from "../../types/software/software.request.types";
 import type { SoftwareSearchResponse } from "../../types/software/software.response.types";
 import type { SoftwareItem } from "../../types/software/software.response.types";
 import {SoftwareAddModal, SoftwareEditModal} from "../../features/object/software/index"
 import { FilterModal } from "../../UI/filter/FilterModal";
 import {softwareFilterFields, softwareFilterInitialValues, type SoftwareFilter} from "../../filters/software.filters";
+import { api } from "../../api/axios";
 
 export const SoftwarePage: React.FC = () => {
   const { t } = useTranslation();
@@ -42,8 +42,8 @@ export const SoftwarePage: React.FC = () => {
       filter,
     };
 
-    const response = await getSoftwareList(request);
-    return response.data;
+    const response = await api.post("/api/v1/software/search",request);
+          return response.data;
   },
 });
 
@@ -109,9 +109,46 @@ export const SoftwarePage: React.FC = () => {
     label: t("softwareModal.fields.softwareVersion"),
   },
 
+   {
+    key: "softwarePurpose",
+    label: t("softwareModal.fields.purpose"),
+  },
+  {
+    key: "manufacturer",
+    label: t("softwareModal.fields.manufacturer"),
+  },
+  {
+    key: "supplier",
+    label: t("softwareModal.fields.supplier"),
+  },
+  {
+    key: "purchaseDate",
+    label: t("softwareModal.fields.purchaseDate"),
+  },
+  {
+    key: "purchaseAmount",
+    label: t("softwareModal.fields.purchaseAmount"),
+  },
+  {
+    key: "purchaseCurrency",
+    label: t("softwareModal.fields.purchaseCurrency"),
+    render: (row) => row.purchaseCurrency?.titleRu ?? "-",
+  },
+  {
+    key: "lastUpdateDate",
+    label: t("softwareModal.fields.lastUpdateDate"),
+  },
   {
     key: "licenseType",
     label: t("softwareModal.fields.licenseType"),
+  },
+  {
+    key: "licenseExpiryDate",
+    label: t("softwareModal.fields.licenseExpiryDate"),
+  },
+  {
+    key: "licenseCount",
+    label: t("softwareModal.fields.licenseCount"),
   },
 ];
 

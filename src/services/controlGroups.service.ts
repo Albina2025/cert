@@ -1,5 +1,5 @@
 import { api } from "../api/axios"
-import type { ControlGroupsItem } from "../types/control/ControlGroups.item.types"
+import type { ControlGroupsItem } from "../types/control/controlGroups.item.types"
 import type { ControlGroupsFormValues } from "../types/control/controlGroups.form.types"
 
 export const getControlGroupById = async (

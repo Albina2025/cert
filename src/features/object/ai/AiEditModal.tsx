@@ -1,13 +1,11 @@
-import { useEffect } from "react";
+import { BaseModal, BaseButton } from "../../../UI/index";
+import { AiForm } from "./AiForm";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { notifications } from "@mantine/notifications";
-import { BaseModal } from "../../../UI/index";
-import { useTranslation } from "react-i18next";
-import { useForm } from "@mantine/form";
-import { AiForm } from "./index";
 import { api } from "../../../api/axios";
-import type { AiFormValues } from "../../../types/ai/ai.form.types";
-import type { CreateAiRequest } from "../../../types/ai/ai.request.types";
+import { useTranslation } from "react-i18next";
+import type { AiFormValues } from "../../../schemas/ai.schema";
+import { useRef } from "react";
 
 interface Props {
   opened: boolean;
@@ -18,27 +16,7 @@ interface Props {
 export const AiEditModal: React.FC<Props> = ({ opened, onClose, aiId }) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-
-  const form = useForm<AiFormValues>({
-    initialValues: {
-      ministryId: "",
-      computePlatformTypeId: "",
-      hardwareName: "",
-      hardwarePurpose: "",
-      responsibleUnit: "",
-      hardwareSupplier: "",
-      purchaseDate: "",
-      purchaseAmount: "",
-      purchaseCurrencyId: "",
-      hardwareSpecs: "",
-      modelName: "",
-      modelPurpose: "",
-      modelDeveloper: "",
-      usesApi: false,
-      apiProvider: "",
-    },
-  });
-
+  const formRef = useRef<HTMLFormElement>(null);
 
   const { data } = useQuery({
     queryKey: ["ai", aiId],
@@ -49,35 +27,8 @@ export const AiEditModal: React.FC<Props> = ({ opened, onClose, aiId }) => {
     enabled: !!aiId,
   });
 
-
-  useEffect(() => {
-    if (data) {
-      form.setValues({
-        ministryId: String(data.ministryDto?.id ?? ""),
-        computePlatformTypeId: String(data.computePlatformType?.id ?? ""),
-        hardwareName: data.hardwareName ?? "",
-        hardwarePurpose: data.hardwarePurpose ?? "",
-        responsibleUnit: data.responsibleUnit ?? "",
-        hardwareSupplier: data.hardwareSupplier ?? "",
-        purchaseDate: data.purchaseDate ?? "",
-        purchaseAmount: String(data.purchaseAmount ?? ""),
-        purchaseCurrencyId: String(data.purchaseCurrency?.id ?? ""),
-        hardwareSpecs: data.hardwareSpecs ?? "",
-        modelName: data.modelName ?? "",
-        modelPurpose: data.modelPurpose ?? "",
-        modelDeveloper: data.modelDeveloper ?? "",
-        usesApi: data.usesApi ?? false,
-        apiProvider: data.apiProvider ?? "",
-      });
-    }
-  }, [data]);
-
-
   const mutation = useMutation({
-    mutationFn: async (values: CreateAiRequest) => {
-      const res = await api.put(`/api/v1/ai/${aiId}`, values);
-      return res.data;
-    },
+    mutationFn: (values: AiFormValues) => api.put(`/api/v1/ai/${aiId}`, values),
     onSuccess: () => {
       notifications.show({
         title: t("notifications.success"),
@@ -96,20 +47,42 @@ export const AiEditModal: React.FC<Props> = ({ opened, onClose, aiId }) => {
     },
   });
 
-
-  const handleSubmit = (values: AiFormValues) => {
-    mutation.mutate({
-      ...values,
-      ministryId: Number(values.ministryId),
-      computePlatformTypeId: Number(values.computePlatformTypeId),
-      purchaseCurrencyId: Number(values.purchaseCurrencyId),
-      apiProvider: values.usesApi ? values.apiProvider : "",
-    } as CreateAiRequest);
-  };
+  const handleSubmit = (values: AiFormValues) => mutation.mutate(values);
 
   return (
     <BaseModal opened={opened} onClose={onClose} size={1200} centered withCloseButton={false}>
-      <AiForm form={form} onSubmit={handleSubmit} loading={mutation.isPending} onCancel={onClose} />
+      {data && (
+        <AiForm
+          ref={formRef}
+          defaultValues={{
+            ministryId: String(data.ministryDto?.id ?? ""),
+            computePlatformTypeId: String(data.computePlatformType?.id ?? ""),
+            hardwareName: data.hardwareName ?? "",
+            hardwarePurpose: data.hardwarePurpose ?? "",
+            responsibleUnit: data.responsibleUnit ?? "",
+            hardwareSupplier: data.hardwareSupplier ?? "",
+            purchaseDate: data.purchaseDate ?? "",
+            purchaseAmount: String(data.purchaseAmount ?? ""),
+            purchaseCurrencyId: String(data.purchaseCurrency?.id ?? ""),
+            hardwareSpecs: data.hardwareSpecs ?? "",
+            modelName: data.modelName ?? "",
+            modelPurpose: data.modelPurpose ?? "",
+            modelDeveloper: data.modelDeveloper ?? "",
+            usesApi: data.usesApi ?? false,
+            apiProvider: data.usesApi ? data.apiProvider ?? "" : "",
+          }}
+          onSubmit={handleSubmit}
+          onCancel={onClose}
+          loading={mutation.isPending}
+        />
+      )}
+      <BaseButton
+        variantType="primary"
+        onClick={() => formRef.current?.requestSubmit()}
+        loading={mutation.isPending}
+      >
+        {t("aiModal.buttons.confirm")}
+      </BaseButton>
     </BaseModal>
   );
 };

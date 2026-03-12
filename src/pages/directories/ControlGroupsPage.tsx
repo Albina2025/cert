@@ -6,12 +6,12 @@ import {ControlGroupsAddModal,ControlGroupsEditModal,} from "../../features/dire
 import { api } from "../../api/axios"
 import type {ControlGroupsSearchRequest} from "../../types/control/controlGroups.request.types"
 import type {ControlGroupsSearchResponse} from "../../types/control/controlGroups.response.types"
-import type {ControlGroupsItem} from "../../types/control/ControlGroups.item.types"
+import type {ControlGroupsItem} from "../../types/control/controlGroups.item.types"
 import {Button,Flex,Menu,useMantineColorScheme} from "@mantine/core"
 import {IconChevronRight,IconMenu2,IconCheck,IconX} from "@tabler/icons-react"
 import { changeControlGroupStatus } from "../../services/controlGroups.service"
 import { FilterModal, type FilterField } from "../../UI/filter/FilterModal"
-import {controlGroupsFilterFields,controlGroupsFilterInitialValues,type ControlGroupsFilter} from "../../filters/controlGroup.filter"
+import {controlGroupsFilter,controlGroupsFilterInitialValues,type ControlGroupsFilter} from "../../filters/controlGroup.filter"
 
 export const ControlGroupsPage: React.FC = () => {
   const { t, i18n } = useTranslation()
@@ -160,7 +160,7 @@ export const ControlGroupsPage: React.FC = () => {
 
     {
       key: "titleRu",
-      label: t("controlGroupsModal.fields.titleRu"),
+      label: t("controlGroups.fields.titleRu"),
 
       render: (row) =>
         i18n.language === "kg"
@@ -170,7 +170,7 @@ export const ControlGroupsPage: React.FC = () => {
 
     {
       key: "titleKg",
-      label: t("controlGroupsModal.fields.titleKg"),
+      label: t("controlGroups.fields.titleKg"),
 
       render: (row) =>
         i18n.language === "kg"
@@ -180,12 +180,12 @@ export const ControlGroupsPage: React.FC = () => {
 
     {
       key: "identifier",
-      label: t("controlGroupsModal.fields.identifier"),
+      label: t("controlGroups.fields.identifier"),
     },
 
     {
       key: "parent",
-      label: t("controlGroupsModal.fields.parent"),
+      label: t("controlGroups.fields.parent"),
 
       render: (row) =>
         row.parent
@@ -238,7 +238,7 @@ export const ControlGroupsPage: React.FC = () => {
 
         initialValues={controlGroupsFilterInitialValues}
 
-        fields={controlGroupsFilterFields.map(
+        fields={controlGroupsFilter.map(
           (field: FilterField<ControlGroupsFilter>) => ({
             ...field,
             label: t(`controlGroupsFilter.fields.${field.name}`),

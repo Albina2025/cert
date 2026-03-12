@@ -1,23 +1,52 @@
-import { Stack, Group, Grid, Box, Title, Divider } from "@mantine/core";
+import { Stack, Group, Grid, Box, Title, Divider, Switch } from "@mantine/core";
 import { BaseButton, FloatingInput, FloatingSelect } from "../../../UI/index";
 import { useTranslation } from "react-i18next";
 import { useMantineColorScheme } from "@mantine/core";
-import type { AiFormValues } from "../../../types/ai/ai.form.types";
+import { forwardRef, useState } from "react";
+import { useForm } from "@mantine/form";
+import { zodResolver } from "mantine-form-zod-resolver";
+import { aiSchema, type AiFormValues } from "../../../schemas/ai.schema";
+import { IconCheck, IconX } from "@tabler/icons-react";
 
 interface Props {
-  form: ReturnType<typeof import("@mantine/form").useForm<AiFormValues>>;
+  defaultValues?: AiFormValues;
   onSubmit: (values: AiFormValues) => void;
   loading?: boolean;
   onCancel: () => void;
 }
 
-export const AiForm: React.FC<Props> = ({ form, onSubmit, loading, onCancel }) => {
-  const { t } = useTranslation();
-  const { colorScheme } = useMantineColorScheme();
-  const isDark = colorScheme === "dark";
+
+  export const AiForm = forwardRef<HTMLFormElement, Props>(
+  ({ defaultValues, onSubmit, loading, onCancel }, ref) => {
+    const { t } = useTranslation();
+    const { colorScheme } = useMantineColorScheme();
+   const isDark = colorScheme === "dark";
+    const [usesApi, setUsesApi] = useState(defaultValues?.usesApi || false);
+    
+
+    const form = useForm<AiFormValues>({
+      initialValues: defaultValues || {
+        ministryId: "",
+        computePlatformTypeId: "",
+        hardwareName: "",
+        hardwarePurpose: "",
+        responsibleUnit: "",
+        hardwareSupplier: "",
+        purchaseDate: "",
+        purchaseAmount: "",
+        purchaseCurrencyId: "",
+        hardwareSpecs: "",
+        modelName: "",
+        modelPurpose: "",
+        modelDeveloper: "",
+        usesApi: false,
+        apiProvider: "",
+      },
+      validate: zodResolver(aiSchema),
+    });
 
   return (
-    <Stack>
+    <Stack p={20}>
       <Box
         p="md"
         style={{
@@ -31,20 +60,31 @@ export const AiForm: React.FC<Props> = ({ form, onSubmit, loading, onCancel }) =
 
         <Divider mb="md" />
 
-        <form onSubmit={form.onSubmit(onSubmit)}>
-        
+        <form ref={ref} onSubmit={form.onSubmit(onSubmit)}>
+        <Box
+          p="md"
+          style={{
+            border: `1px solid ${isDark ? "#303d43" : "#d9d9d9"}`,
+            borderRadius: 8,
+          }}
+        >
+          <Title ta="center" size={20} mb="md">
+            {t("aiModal.hardware")}
+          </Title>
           <Grid>
             <Grid.Col span={6}>
               <FloatingSelect
                 required
                 labelText={t("aiModal.fields.ministryId")}
-                 placeholder={t("aiModal.fields.ministryId")}
+                placeholder={t("aiModal.fields.ministryId")}
                 data={[
-                    { value: "1", label: "Министерство 1" },
-                    { value: "2", label: "Министерство 2" },
-                    { value: "3", label: "Министерство 3" },
+                  { value: "1", label: "Министерство 1" },
+                  { value: "2", label: "Министерство 2" },
+                  { value: "3", label: "Министерство 3" },
                 ]}
-                {...form.getInputProps("ministryId")}
+                value={form.values.ministryId}
+                onChange={(v) => form.setFieldValue("ministryId", v ?? "")}
+                error={form.errors.ministryId}
               />
             </Grid.Col>
 
@@ -54,11 +94,13 @@ export const AiForm: React.FC<Props> = ({ form, onSubmit, loading, onCancel }) =
                 labelText={t("aiModal.fields.computePlatformTypeId")}
                 placeholder={t("aiModal.fields.computePlatformTypeId")}
                 data={[
-                    { value: "1", label: "Тип 1" },
-                    { value: "2", label: "Тип 2" },
-                    { value: "3", label: "Тип 3" },
+                  { value: "1", label: "Тип 1" },
+                  { value: "2", label: "Тип 2" },
+                  { value: "3", label: "Тип 3" },
                 ]}
-                {...form.getInputProps("computePlatformTypeId")}
+                value={form.values.computePlatformTypeId}
+                onChange={(v) => form.setFieldValue("computePlatformTypeId", v ?? "")}
+                error={form.errors.computePlatformTypeId}
               />
             </Grid.Col>
 
@@ -90,7 +132,7 @@ export const AiForm: React.FC<Props> = ({ form, onSubmit, loading, onCancel }) =
               />
             </Grid.Col>
 
-            <Grid.Col span={6}>
+            <Grid.Col span={12}>
               <FloatingInput
                 type="date"
                 labelText={t("aiModal.fields.purchaseDate")}
@@ -112,15 +154,17 @@ export const AiForm: React.FC<Props> = ({ form, onSubmit, loading, onCancel }) =
                 labelText={t("aiModal.fields.purchaseCurrencyId")}
                 placeholder={t("aiModal.fields.purchaseCurrencyId")}
                 data={[
-                    { value: "1", label: t("aiModal.currencyOptions.som") },
-                    { value: "2", label: t("aiModal.currencyOptions.euro") },
-                    { value: "3", label: t("aiModal.currencyOptions.dollar") },
+                  { value: "1", label: t("aiModal.currencyOptions.som") },
+                  { value: "2", label: t("aiModal.currencyOptions.euro") },
+                  { value: "3", label: t("aiModal.currencyOptions.dollar") },
                 ]}
-                {...form.getInputProps("purchaseCurrencyId")}
+                value={form.values.purchaseCurrencyId}
+                onChange={(v) => form.setFieldValue("purchaseCurrencyId", v ?? "")}
+                error={form.errors.purchaseCurrencyId}
               />
             </Grid.Col>
 
-            <Grid.Col span={6}>
+            <Grid.Col span={12}>
               <FloatingInput
                 labelText={t("aiModal.fields.hardwareSpecs")}
                 {...form.getInputProps("hardwareSpecs")}
@@ -128,9 +172,54 @@ export const AiForm: React.FC<Props> = ({ form, onSubmit, loading, onCancel }) =
             </Grid.Col>
           </Grid>
 
-      
-          <Divider my="md" />
+          </Box>
+
+          <Box
+            p="md"
+            style={{
+              border: `1px solid ${isDark ? "#303d43" : "#d9d9d9"}`,
+              borderRadius: 8,
+            }}
+          >
+          <Title ta="center" size={20} mb="md">
+            {t("aiModal.model")}
+          </Title>
+
           <Grid>
+            <Grid.Col span={12}>
+              <Switch
+                  label={t("aiModal.fields.usesApi")}
+                  checked={usesApi}
+                  onChange={(event) => {
+                    const checked = event.currentTarget.checked;
+                    setUsesApi(checked);
+                    form.setFieldValue("usesApi", checked);
+                    if (!checked) form.setFieldValue("apiProvider", ""); 
+                  }}
+                  color={usesApi ? "green" : "red"}
+                  thumbIcon={
+                    usesApi 
+                      ? <IconCheck size={14} color="green" /> 
+                      : <IconX size={14} color="red" />      
+                  }
+                  styles={(theme) => ({
+                    track: {
+                      backgroundColor: usesApi ? theme.colors.green[6] : theme.colors.red[6],
+                    },
+                    thumb: {
+                      borderRadius: "50%",
+                      backgroundColor: "white", 
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    },
+                    label: {
+                      fontWeight: 500,
+                    },
+                  })}
+                />
+            </Grid.Col>
+
             <Grid.Col span={6}>
               <FloatingInput
                 labelText={t("aiModal.fields.modelName")}
@@ -151,17 +240,6 @@ export const AiForm: React.FC<Props> = ({ form, onSubmit, loading, onCancel }) =
                 {...form.getInputProps("modelDeveloper")}
               />
             </Grid.Col>
-          </Grid>
-
-         
-          <Divider my="md" />
-          <Grid>
-            <Grid.Col span={12}>
-              <FloatingSelect
-                labelText={t("aiModal.fields.usesApi")}
-                {...form.getInputProps("usesApi", { type: "checkbox" })}
-              />
-            </Grid.Col>
 
             {form.values.usesApi && (
               <Grid.Col span={12}>
@@ -172,6 +250,8 @@ export const AiForm: React.FC<Props> = ({ form, onSubmit, loading, onCancel }) =
               </Grid.Col>
             )}
           </Grid>
+          </Box>
+          
 
           <Group justify="center" mt="md">
             <BaseButton type="button" variantType="secondary" onClick={onCancel}>
@@ -185,4 +265,6 @@ export const AiForm: React.FC<Props> = ({ form, onSubmit, loading, onCancel }) =
       </Box>
     </Stack>
   );
-};
+}
+  )
+AiForm.displayName = "AiForm";

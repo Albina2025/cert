@@ -75,26 +75,24 @@
             "name": "Название ПО",
             "purpose": "Назначение ПО",
             "manufacturer": "Производитель ПО",
-            "supplier": "Поставщик",
+            "supplier": "Поставщик програмного обеспечения",
             "purchaseDate": "Дата приобретения",
             "purchaseAmount": "Сумма приобретения",
-            "purchaseCurrency": "Валюта покупки",
+            "purchaseCurrency": "Валюта суммы",
             "softwareVersion": "Версия ПО",
             "lastUpdateDate": "Дата последнего обновления ПО",
-            "licenseExpiryDate": "Дата окончания лицензии",
             "licenseType": "Тип лицензии ПО",
+            "licenseExpiryDate": "Дата окончания срока действия лицензии",
             "licenseCount": "Количество лицензий ПО"
         },
 
-        "licenseOptions": {
-        "commercial": "Коммерческая",
-        "open": "Open Source",
-        "trial": "Триал"
-        },
-
         "subjectOptions": {
-        "state": "Государственный",
-        "private": "Частный"
+            "state": "Государственный",
+            "private": "Частный"
+        },
+        "licenseOptions": {
+            "perpetual": "Бессрочная",
+            "subscription": "Подписка"
         },
 
         "currencyOptions": {
@@ -139,10 +137,10 @@
             "purchaseAmount": "Сумма приобретения",
             "purchaseCurrencyId": "Валюта  ",
             "hardwareSpecs": "Краткие характеристики",
+            "usesApi": "Используется API",
             "modelName": "Наименование модели ИИ",
             "modelPurpose": "Назначение модели ИИ",
             "modelDeveloper": "Разработчик / поставщик модели ИИ",
-            "usesApi": "Используется API",
             "apiProvider": "Поставщик API"
         },
          "currencyOptions": {
@@ -214,6 +212,11 @@
             "titleRu": "Наименование на русском",
             "titleKg": "Наименование на кыргызском",
             "controlId": "Группа контролей"
+        },
+
+        "buttons": {
+            "reset": "Сбросить",
+            "apply": "Применить фильтры"
         }
     },
 
@@ -242,6 +245,11 @@
             "titleRu": "Наименование на русском",
             "titleKg": "Наименование на кыргызском",
             "parentId": "Родительская группа"
+        },
+
+        "buttons": {
+            "reset": "Сбросить",
+            "apply": "Применить фильтры"
         }
     }
     

@@ -7,6 +7,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import type { SectorFormValues } from "../../../types/sector/sector.form.types";
 import type { SectorItem } from "../../../types/sector/sector.response.types";
+import { useRef } from "react";
 
 
 interface Props {
@@ -20,6 +21,7 @@ export const PrivateSectorEditModal: React.FC<Props> = ({ opened, onClose, secto
   const queryClient = useQueryClient();
   const { colorScheme } = useMantineColorScheme();
   const isDark = colorScheme === "dark";
+   const formRef = useRef<HTMLFormElement>(null)
 
  const { data } = useQuery<SectorItem>({
   queryKey: ["sector", sectorId],
@@ -61,6 +63,7 @@ export const PrivateSectorEditModal: React.FC<Props> = ({ opened, onClose, secto
           <Divider />
           {data && (
             <PrivateSectorForm
+              ref={formRef}
               defaultValues={{
                 titleRu: data.titleRu,
                 titleKg: data.titleKg,
@@ -77,7 +80,7 @@ export const PrivateSectorEditModal: React.FC<Props> = ({ opened, onClose, secto
             </BaseButton>
             <BaseButton
               variantType="primary"
-              onClick={() => document.querySelector("form")?.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }))}
+              onClick={() => formRef.current?.requestSubmit()}
               loading={mutation.isPending}
             >
               {t("privateSectorModal.buttons.confirm")}
